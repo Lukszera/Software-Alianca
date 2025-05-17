@@ -7,31 +7,73 @@
     <link rel="stylesheet" href="css/detalhes-material.css.css">
 </head>
 <body>
+
     <header>
         <img src="imagens/Logo4.png" alt="Logo" height="135">
     </header>
 
+     <a href="menu.html" class="icone-voltar">
+        <img src="imagens/voltar.png" alt="Voltar">
+    </a>
+    
     <div class="formulario-detalhes">
-        <h2>Código Interno - 020200</h2>
+
+        <div class="cabecalho-formulario">
+            <span class="codigo-interno">CÓDIGO INTERNO - 020200</span>
+            <img src="imagens/anexar.png" alt="Anexar" class="icone-formulario">
+            <img src="imagens/arquivos.png" alt="Arquivos" class="icone-formulario">
+            <img src="imagens/lapis.png" alt="Editar" class="icone-formulario">
+            <img src="imagens/excluir.png" alt="Excluir" class="icone-formulario">
+        </div>
+
+        <input type="file" id="input-anexo" style="display:none;">
+        <a id="link-arquivo" href="#" style="display:none;" download>Arquivo Anexado</a>
+
+        <div id="modal-excluir" class="modal-excluir">
+            <div class="modal-conteudo">
+                <div class="modal-titulo">VOCÊ TEM CERTEZA QUE DESEJA EXCLUIR O MATERIAL?</div>
+                <div class="modal-botoes">
+                    <button class="btn-excluir">CONFIRMAR ✔</button>
+                    <button class="btn-cancelar">CANCELAR ✖</button>
+                </div>
+            </div>
+        </div>
+
         <form>
-            <label for="descricao-breve">Descrição breve:</label>
-            <input type="text" id="descricao-breve" name="descricao-breve" value="Filtro de ar" readonly>
+            <label for="descricao-breve">DESCRIÇÃO BREVE:</label>
+            <input type="text" id="descricao-breve" name="descricao-breve" value="FILTRO DE AR" readonly>
 
-            <label for="descricao-completa">Descrição completa:</label>
-            <textarea id="descricao-completa" name="descricao-completa" readonly>Filtro de ar Golf Mk4 2001</textarea>
+            <label for="descricao-completa">DESCRIÇÃO COMPLETA:</label>
+            <textarea id="descricao-completa" name="descricao-completa" readonly>FILTRO DE AR GOLF MK4 2001</textarea>
 
-            <label for="fabricante">Fabricante:</label>
-            <input type="text" id="fabricante" name="fabricante" value="Fabricante X" readonly>
+            <label for="fabricante">FABRICANTE:</label>
+            <input type="text" id="fabricante" name="fabricante" value="FABRICANTE X" readonly>
 
-            <label for="codigo-fabricante">Código Fabricante:</label>
+            <label for="codigo-fabricante">CÓDIGO FABRICANTE:</label>
             <input type="text" id="codigo-fabricante" name="codigo-fabricante" value="12345" readonly>
 
-            <label for="valor">Valor:</label>
+            <label for="valor">VALOR:</label>
             <input type="text" id="valor" name="valor" value="R$ 50,00" readonly>
 
-            <label for="quantidade">Quantidade:</label>
+            <label for="quantidade">QUANTIDADE:</label>
             <input type="text" id="quantidade" name="quantidade" value="10" readonly>
         </form>
+
+        <div id="modal-arquivos" class="modal-arquivos">
+            <div class="modal-arquivos-conteudo">
+            <div class="modal-arquivos-titulo">ARQUIVOS</div>
+            <div class="lista-arquivos"></div>
+            </div>
+        </div>
+
+        <div class="botoes-edicao" style="display: none;">
+            <button type="button" class="btn-confirmar-edicao">CONFIRMAR ✔</button>
+            <button type="button" class="btn-cancelar-edicao">CANCELAR ✖</button>
+        </div>
+        
     </div>
+
+    <script src="funcoes.js"></script>
+
 </body>
 </html>
