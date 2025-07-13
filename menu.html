@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Materiais</title>
+    <link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+    <header>
+        <img src="imagens/Logo4.png" alt="Logo" height= "135";>
+    </header>
+
+    <div class="fundo">
+        <div class="pesquisa">
+            <input type="text" placeholder="Busque pelo material que deseja" class="input-busca">
+            <img src="imagens/lupa.png" class="icone-lupa" alt="Search" onclick="alert('Pesquisar Material')">
+        </div>
+        <button class="botao-cadastro" onclick="window.location.href='cadastro-material.html'">CADASTRAR MATERIAL</button>
+        </div>
+
+    <div class="tabela">
+        <table class="tabela-estoque">
+            <thead>
+                <tr>
+                    <th>CÓDIGO INTERNO</th>
+                    <th>DESCRIÇÃO BREVE</th>
+                    <th>FABRICANTE</th>
+                    <th>CÓDIGO FABRICANTE</th>
+                    <th>VALOR</th>
+                    <th>QUANTIDADE</th>
+                    <th>UND. MEDIDA</th>
+                    <th>FORNECEDOR</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="tbody-materiais">
+            </tbody>
+        </table>
+    </div>
+    
+<script src="funcoes.js"></script>
+
+</body>
+
+</html>
