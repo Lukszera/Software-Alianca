@@ -54,8 +54,25 @@ header {
   height: 45px;
   padding: 10px;
   font-size: 17px;
-  font-weight: bold; /* Adiciona negrito ao texto */
+  font-weight: bold; 
   cursor: pointer; 
+}
+
+.botao-movimentacao {
+  background-color: #00A54F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer; 
+}
+
+.botao-cadastro + .botao-movimentacao {
+    margin-top: 15px;
 }
 
 .botao-cadastro:hover {
@@ -69,8 +86,6 @@ header {
   top: 270px;
   left: 530px; /* Ajuste a posição horizontal conforme necessário */
   max-height: 830px; /* Define uma altura máxima para a rolagem */
-
-
 }
 
 /* Estilização da barra de rolagem */

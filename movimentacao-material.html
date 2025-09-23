@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Movimentação de Materiais</title>
+    <link rel="stylesheet" href="css/movimentacao-material.css">
+</head>
+<body>
+
+    <header>
+        <img src="imagens/Logo4.png" alt="Logo" height= "135";>
+    </header>
+
+    <a href="menu.html" class="icone-voltar">
+    <img src="imagens/voltar.png" alt="Voltar">
+    </a>    
+
+    <div class="form-movimentacao">
+        <h2>MOVIMENTAÇÃO DE MATERIAIS</h2>
+        <form id="form-movimentacao">
+            <label for="tipo-mov">TIPO:</label>
+            <select id="tipo-mov" name="tipo-mov" required>
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+            </select>
+
+            <label for="codigo-interno">CÓDIGO INTERNO:</label>
+            <input type="text" id="codigo-interno" name="codigo-interno" required placeholder="Ex: 10000001">
+
+            <label for="quantidade-mov">QUANTIDADE:</label>
+            <input type="number" id="quantidade-mov" name="quantidade-mov" min="1" required>
+
+            <button type="submit">CONFIRMAR</button>
+        </form>
+        <div id="mensagem-mov"></div>
+    </div>
+    <script src="funcoes.js"></script>
+</body>
+</html>

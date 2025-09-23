@@ -1,0 +1,118 @@
+body {
+  background-color: #E6E6E6;
+  font-family: 'Roboto', sans-serif;
+}
+
+header {
+  background-color: #00A54F;
+  text-align: center;
+  margin: -10px;
+  border-bottom: 5px solid #DBC056;
+}
+
+.icone-voltar {
+  position: absolute;
+  top: 173px;
+  left: 35px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.icone-voltar img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.icone-voltar img:hover {
+  filter: brightness(0.85);
+}
+
+.form-movimentacao {
+  width: 720px;
+  margin: 70px auto;
+  padding: 30px;
+  border: 4px solid #00A54F;
+  background-color: #E6E6E6;
+  border-radius: 10px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+
+.form-movimentacao h2 {
+  text-align: center;
+  color: white;
+  background-color: #00A54F;
+  padding: 15px;
+  margin: -30px -30px 30px -30px;
+  font-size: 20px;
+}
+
+.form-movimentacao label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.form-movimentacao input,
+.form-movimentacao select {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 2px solid #DBC056;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 18px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff;
+  color: #000;
+}
+
+.form-movimentacao select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 16,0 8,8'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 18px 18px;
+  padding-right: 40px;
+}
+
+.form-movimentacao :focus {
+  border: 2px solid #00A54F !important;
+  outline: none;
+}
+
+.form-movimentacao button {
+  background-color: #00A54F;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.form-movimentacao button:hover {
+  background-color: #078343;
+}
+
+#mensagem-mov {
+  margin-top: 15px;
+  font-size: 16px;
+  text-align: center;
+}
