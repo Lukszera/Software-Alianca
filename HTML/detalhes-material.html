@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Material</title>
+    <link rel="stylesheet" href="../css/detalhes-material.css.css">
+</head>
+<body>
+
+    <header>
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
+    </header>
+
+    <a href="menu.html" class="icone-voltar">
+        <img src="../imagens/voltar.png" alt="Voltar">
+    </a>
+    
+<div class="formulario-detalhes">
+
+    <div class="cabecalho-formulario">
+        <span class="codigo-interno"></span>
+        <img src="../imagens/anexar.png" alt="Anexar" class="icone-formulario">
+        <img src="../imagens/arquivos.png" alt="Arquivos" class="icone-formulario">
+        <img src="../imagens/lapis.png" alt="Editar" class="icone-formulario">
+        <img src="../imagens/excluir.png" alt="Excluir" class="icone-formulario">
+    </div>
+
+    <input type="file" id="input-anexo" style="display:none;">
+    <a id="link-arquivo" href="#" style="display:none;" download>Arquivo Anexado</a>
+
+    <div id="modal-excluir" class="modal-excluir">
+        <div class="modal-conteudo">
+            <div class="modal-titulo">VOCÊ TEM CERTEZA QUE DESEJA EXCLUIR O MATERIAL?</div>
+            <div class="modal-botoes">
+                <button class="btn-excluir">CONFIRMAR ✔</button>
+                <button class="btn-cancelar">CANCELAR ✖</button>
+            </div>
+        </div>
+    </div>
+
+    <form>
+        <label for="descricao-breve">DESCRIÇÃO BREVE:</label>
+        <input type="text" id="descricao-breve" name="descricao-breve" readonly>
+
+        <label for="descricao-completa">DESCRIÇÃO COMPLETA:</label>
+        <textarea id="descricao-completa" name="descricao-completa" readonly></textarea>
+
+        <label for="fabricante">FABRICANTE:</label>
+        <input type="text" id="fabricante" name="fabricante" readonly>
+
+        <label for="codigo-fabricante">CÓDIGO FABRICANTE:</label>
+        <input type="text" id="codigo-fabricante" name="codigo-fabricante" readonly>
+
+        <label for="fornecedor">FORNECEDOR:</label>
+        <input type="text" id="fornecedor" name="fornecedor" readonly>
+
+        <label for="valor">VALOR:</label>
+        <div class="valor-wrapper">
+            <input type="number" id="valor" name="valor" min="0" step="0.01" readonly>
+        </div>
+
+        <label for="und-medida">UNIDADE DE MEDIDA:</label>
+        <select id="und-medida" name="und-medida" disabled>
+            <option value="M">M</option>
+            <option value="UN">UN</option>
+            <option value="KG">KG</option>
+            <option value="L">L</option>
+            <option value="m2">M2</option>
+            <option value="m3">M3</option>
+        </select>
+
+        <label for="quantidade-segura">QUANTIDADE SEGURA:</label>
+        <input type="text" id="quantidade-segura" name="quantidade-segura" readonly>
+
+        <label for="quantidade">QUANTIDADE:</label>
+        <input type="text" id="quantidade" name="quantidade" readonly>
+    </form>
+
+    <div id="modal-arquivos" class="modal-arquivos">
+        <div class="modal-arquivos-conteudo">
+            <div class="modal-arquivos-titulo">ARQUIVOS</div>
+            <div class="lista-arquivos"></div>
+        </div>
+    </div>
+
+    <div class="botoes-edicao" style="display: none;">
+        <button type="button" class="btn-confirmar-edicao">CONFIRMAR ✔</button>
+        <button type="button" class="btn-cancelar-edicao">CANCELAR ✖</button>
+    </div>
+    
+</div>
+
+<script src="../funcoes.js"></script>

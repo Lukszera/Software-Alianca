@@ -6,6 +6,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Adicione esta linha:
+app.use(express.static('HTML'));
+// Se necessário, adicione para imagens e css:
+app.use(express.static('../imagens'));
+app.use(express.static('../css'));
+app.use(express.static('../'));
+
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
@@ -131,6 +138,56 @@ app.post('/materiais/movimentacao', async (req, res) => {
     }
     await pool.query('UPDATE materiais SET quantidade = $1 WHERE id = $2', [novaQuantidade, id]);
     res.json({ message: 'Movimentação realizada com sucesso!', novaQuantidade });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/fornecedores', async (req, res) => {
+  const {
+    nome,
+    razao_social,
+    cnpj,
+    inscricao_estadual,
+    logradouro,
+    numero,
+    bairro,
+    municipio,
+    estado,
+    telefone,
+    email
+  } = req.body;
+
+  try {
+    await pool.query(
+      `INSERT INTO fornecedores (
+        nome, razao_social, cnpj, inscricao_estadual, logradouro,
+        numero, bairro, municipio, estado, telefone, email
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+      [
+        nome,
+        razao_social,
+        cnpj,
+        inscricao_estadual,
+        logradouro,
+        numero,
+        bairro,
+        municipio,
+        estado,
+        telefone,
+        email
+      ]
+    );
+    res.status(201).json({ message: 'Fornecedor cadastrado com sucesso!' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/fornecedores', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT id, nome, cnpj, telefone, email FROM fornecedores ORDER BY id');
+    res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

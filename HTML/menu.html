@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Materiais</title>
-    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="../css/menu.css">
 </head>
 <body>
     <header>
-        <img src="imagens/Logo4.png" alt="Logo" height= "135";>
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
     </header>
 
     <div class="fundo">
         <div class="pesquisa">
             <input type="text" placeholder="Busque pelo material que deseja" class="input-busca">
-            <img src="imagens/lupa.png" class="icone-lupa" alt="Search">
+            <img src="../imagens/lupa.png" class="icone-lupa" alt="Search">
         </div>
         <button class="botao-cadastro" onclick="window.location.href='cadastro-material.html'">CADASTRAR MATERIAL</button>
         <button class="botao-movimentacao" onclick="window.location.href='movimentacao-material.html'">ENTRADA/SAÍDA DE MATERIAL</button>
-        </div>
+        <button class="botao-fornecedor" onclick="window.location.href='cadastro-fornecedor.html'">CADASTRAR FORNECEDOR</button>
+        <button class="botao-consulta-fornecedor" onclick="window.location.href='consulta-fornecedor.html'">CONSULTA FORNECEDOR</button>
+    </div>
 
     <div class="tabela">
         <table class="tabela-estoque">
@@ -40,8 +42,6 @@
         </table>
     </div>
     
-<script src="funcoes.js"></script>
-
+    <script src="../funcoes.js"></script>
 </body>
-
 </html>

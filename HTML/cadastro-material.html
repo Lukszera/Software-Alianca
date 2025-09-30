@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastrar Material</title>
-    <link rel="stylesheet" href="css/cadastro.css">
+    <link rel="stylesheet" href="../css/cadastro.css">
 </head>
 <body>
     <header>
-        <img src="imagens/Logo4.png" alt="Logo" height="135">
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
     </header>
 
     <div class="formulario-cadastro">
@@ -22,7 +22,7 @@
 
             <label for="valor">VALOR:</label>
             <div class="valor-flex">
-            <input type="number" id="valor" name="valor" min="0" step="0.01" required>
+                <input type="number" id="valor" name="valor" min="0" step="0.01" required>
             </div>
 
             <label for="codigo-fabricante">CÓDIGO FABRICANTE:</label>
@@ -51,14 +51,12 @@
             <textarea id="descricao-completa" name="descricao-completa"></textarea>
 
             <div class="botoes">
-            <button type="submit" class="botao-salvar">SALVAR ✔</button>
-            <button type="button" class="botao-cancelar" onclick="window.history.back()">CANCELAR ✖</button>
+                <button type="submit" class="botao-salvar">SALVAR ✔</button>
+                <button type="button" class="botao-cancelar" onclick="window.history.back()">CANCELAR ✖</button>
             </div>
         </form>
     </div>
 
-<script src="funcoes.js"></script>
-
+    <script src="../funcoes.js"></script>
 </body>
-
 </html>

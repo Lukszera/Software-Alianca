@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             if (resp.ok) {
                 alert('Material cadastrado com sucesso!');
-                window.location.href = 'menu.html';
+                window.location.href = 'menu.html'; 
             } else {
                 alert('Erro ao cadastrar material!');
             }
@@ -256,29 +256,29 @@ document.addEventListener('DOMContentLoaded', function() {
         renderizarTabela(materiais);
     }
 
-    function renderizarTabela(materiais) {
-        tbody.innerHTML = '';
-        materiais.forEach(mat => {
-            tbody.innerHTML += `
-                <tr>
-                    <td>${mat.id ? formatarCodigoInterno(mat.id) : ''}</td>
-                    <td>${mat.descricao_breve}</td>
-                    <td>${mat.fabricante}</td>
-                    <td>${mat.codigo_fabricante}</td>
-                    <td>R$ ${Number(mat.valor).toFixed(2)}</td>
-                    <td>${mat.quantidade}</td>
-                    <td>${mat.und_medida}</td>
-                    <td>${mat.fornecedor}</td>
-                    <td>
-                        <button onclick="window.location.href='detalhes-material.html?id=${mat.id}'">
-                            <img src="imagens/Olho.png" class="icone-olho" alt="Olho">
-                            VISUALIZAR
-                        </button>
-                    </td>
-                </tr>
-            `;
-        });
-    }
+function renderizarTabela(materiais) {
+    tbody.innerHTML = '';
+    materiais.forEach(mat => {
+        tbody.innerHTML += `
+            <tr>
+                <td>${mat.id ? formatarCodigoInterno(mat.id) : ''}</td>
+                <td>${mat.descricao_breve}</td>
+                <td>${mat.fabricante}</td>
+                <td>${mat.codigo_fabricante}</td>
+                <td>R$ ${Number(mat.valor).toFixed(2)}</td>
+                <td>${mat.quantidade}</td>
+                <td>${mat.und_medida}</td>
+                <td>${mat.fornecedor}</td>
+                <td>
+                    <button onclick="window.location.href='detalhes-material.html?id=${mat.id}'">
+                        <img src="../imagens/Olho.png" class="icone-olho" alt="Olho">
+                        VISUALIZAR
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
+}
 
     // Filtro ao digitar ou clicar na lupa
     function filtrarMateriais() {
@@ -327,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 if (resp.ok) {
                     alert('Material excluído!');
-                    window.location.href = 'menu.html';
+                    window.location.href = 'menu.html'; // Corrija aqui
                 } else {
                     alert('Erro ao excluir material!');
                 }
@@ -423,11 +423,44 @@ document.addEventListener('DOMContentLoaded', function() {
                 mensagemMov.textContent = resultado.message + ' Nova quantidade: ' + resultado.novaQuantidade;
                 mensagemMov.style.color = 'green';
                 setTimeout(() => {
-                    window.location.href = 'menu.html';
+                    window.location.href = 'menu.html'; // Corrija aqui
                 }, 1200);
             } else {
                 mensagemMov.textContent = resultado.error;
                 mensagemMov.style.color = 'red';
+            }
+        };
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const formFornecedor = document.getElementById('form-fornecedor');
+    if (formFornecedor) {
+        formFornecedor.onsubmit = async function(e) {
+            e.preventDefault();
+            const dados = {
+                nome: document.getElementById('nome').value,
+                razao_social: document.getElementById('razao-social').value,
+                cnpj: document.getElementById('cnpj').value,
+                inscricao_estadual: document.getElementById('inscricao-estadual').value,
+                logradouro: document.getElementById('logradouro').value,
+                numero: document.getElementById('numero').value,
+                bairro: document.getElementById('bairro').value,
+                municipio: document.getElementById('municipio').value,
+                estado: document.getElementById('estado').value,
+                telefone: document.getElementById('telefone').value,
+                email: document.getElementById('email').value
+            };
+            const resp = await fetch('http://localhost:3000/fornecedores', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            if (resp.ok) {
+                alert('Fornecedor cadastrado com sucesso!');
+                window.location.href = 'menu.html';
+            } else {
+                alert('Erro ao cadastrar fornecedor!');
             }
         };
     }

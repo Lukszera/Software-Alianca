@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Fornecedores</title>
+    <link rel="stylesheet" href="../css/consulta-fornecedor.css">
+</head>
+<body>
+    <header>
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
+    </header>
+    <h2 style="text-align:center;color:#00A54F;">CONSULTA DE FORNECEDORES</h2>
+    <table class="tabela-fornecedor">
+        <thead>
+            <tr>
+                <th>CÓDIGO</th>
+                <th>NOME</th>
+                <th>CNPJ</th>
+                <th>TELEFONE</th>
+                <th>E-MAIL</th>
+            </tr>
+        </thead>
+        <tbody id="tbody-fornecedores">
+        </tbody>
+    </table>
+    <script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        const tbody = document.getElementById('tbody-fornecedores');
+        const resp = await fetch('http://localhost:3000/fornecedores');
+        if (resp.ok) {
+            const fornecedores = await resp.json();
+            fornecedores.forEach(f => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${f.id}</td>
+                        <td>${f.nome}</td>
+                        <td>${f.cnpj}</td>
+                        <td>${f.telefone}</td>
+                        <td>${f.email}</td>
+                    </tr>
+                `;
+            });
+        } else {
+            tbody.innerHTML = '<tr><td colspan="5">Erro ao carregar fornecedores.</td></tr>';
+        }
+    });
+    </script>
+</body>
+</html>
