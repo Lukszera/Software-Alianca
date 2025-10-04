@@ -6,15 +6,14 @@ function carregarDados(codigo) {
         document.getElementById('descricao-completa').value = item.descricaoCompleta;
         document.getElementById('fabricante').value = item.fabricante;
         document.getElementById('codigo-fabricante').value = item.codigoFabricante;
-        document.getElementById('valor').value = item.valor;
-        document.getElementById('quantidade').value = mat.quantidade || '';
-    } else {
-        alert("Item não encontrado!");
-    }
+        document.getElementById('valor-custo').value = item.valor_custo || '';
+        document.getElementById('valor').value = item.valor || '';
+        } else {
+            alert("Item não encontrado!");
+        }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // ...outros códigos...
 
     const btnAnexar = document.querySelector('.icone-formulario[alt="Anexar"]');
     const btnArquivos = document.querySelector('.icone-formulario[alt="Arquivos"]');
@@ -115,23 +114,12 @@ document.addEventListener('DOMContentLoaded', function() {
         btnEditar.addEventListener('click', function() {
             // Salva os valores originais
             form.querySelectorAll('input, textarea').forEach(function(el) {
-                valoresOriginais[el.id] = el.value;
-                el.readOnly = false;
-                el.removeAttribute('readonly');
-            });
+    valoresOriginais[el.id] = el.value;
+    el.readOnly = false;
+    el.removeAttribute('readonly');
+});
             botoesEdicao.style.display = 'flex';
         });
-
-        // Confirmar edição
-        document.querySelector('.btn-confirmar-edicao').onclick = function() {
-            form.querySelectorAll('input, textarea').forEach(function(el) {
-                el.readOnly = true;
-                el.setAttribute('readonly', true);
-            });
-            botoesEdicao.style.display = 'none';
-            // Aqui você pode adicionar lógica para salvar os dados, se desejar
-            alert('Alterações salvas!');
-        };
 
         // Cancelar edição
         document.querySelector('.btn-cancelar-edicao').onclick = function() {
@@ -184,60 +172,72 @@ document.addEventListener('DOMContentLoaded', async function() {
     if (window.location.pathname.endsWith('detalhes-material.html')) {
         const id = getParametroUrl('id');
         if (id) {
-            const resp = await fetch(`http://localhost:3000/materiais/${id}`);
-            if (resp.ok) {
-                const mat = await resp.json();
-                // Preenche os campos do formulário
+            // Busca material e fornecedores em paralelo
+            const [respMat, respForn] = await Promise.all([
+                fetch(`http://localhost:3000/materiais/${id}`),
+                fetch('http://localhost:3000/fornecedores')
+            ]);
+            if (respMat.ok && respForn.ok) {
+                const mat = await respMat.json();
+                const fornecedores = await respForn.json();
+
+                // Preenche todos os campos normalmente
                 document.getElementById('descricao-breve').value = mat.descricao_breve || '';
                 document.getElementById('descricao-completa').value = mat.descricao_completa || '';
                 document.getElementById('fabricante').value = mat.fabricante || '';
                 document.getElementById('codigo-fabricante').value = mat.codigo_fabricante || '';
-                document.getElementById('fornecedor').value = mat.fornecedor || '';
+                document.getElementById('valor-custo').value = mat.valor_custo || '';
                 document.getElementById('valor').value = mat.valor || '';
-                const selectUnd = document.getElementById('und-medida');
-                if (selectUnd) selectUnd.value = mat.und_medida || '';
-                document.getElementById('quantidade-segura').value = mat.quantidade_segura || '';
                 document.getElementById('quantidade').value = mat.quantidade || '';
-                // Exibe o código interno formatado em algum lugar
-                document.querySelector('.codigo-interno').textContent = 'CÓDIGO INTERNO - ' + formatarCodigoInterno(mat.id);
-            } else {
-                document.getElementById('detalhes-material').innerText = 'Material não encontrado!';
+                document.getElementById('und-medida').value = mat.und_medida || '';
+                document.getElementById('quantidade-segura').value = mat.quantidade_segura || '';
+
+                // Preenche o código interno (se existir)
+                const campoCodigoInterno = document.getElementById('codigo-interno');
+                if (campoCodigoInterno && mat.id) {
+                    campoCodigoInterno.value = formatarCodigoInterno(mat.id);
+                }
+
+                const spanCodigoInterno = document.querySelector('.codigo-interno');
+                if (spanCodigoInterno && mat.id) {
+                    spanCodigoInterno.textContent = 'CÓDIGO INTERNO - ' + formatarCodigoInterno(mat.id);
+                }
+                // Mapa de fornecedores para exibir código-nome
+                const mapaFornecedores = {};
+                fornecedores.forEach(f => {
+                    mapaFornecedores[f.id] = f.nome;
+                });
+
+                // Preenche o input readonly com código-nome
+                const inputFornecedor = document.getElementById('fornecedor');
+                if (inputFornecedor) {
+                    if (mat.fornecedor && mapaFornecedores[mat.fornecedor]) {
+                        inputFornecedor.value = `${mat.fornecedor} - ${mapaFornecedores[mat.fornecedor]}`;
+                    } else if (mat.fornecedor) {
+                        inputFornecedor.value = mat.fornecedor;
+                    } else {
+                        inputFornecedor.value = '';
+                    }
+                }
+
+                // Preenche o select de fornecedores para edição
+                const selectFornecedor = document.getElementById('select-fornecedor');
+                if (selectFornecedor) {
+                    selectFornecedor.innerHTML = '<option value="">Selecione o fornecedor</option>';
+                    fornecedores.forEach(f => {
+                        const opt = document.createElement('option');
+                        opt.value = f.id;
+                        opt.textContent = `${f.id} - ${f.nome}`;
+                        if (mat.fornecedor == f.id) opt.selected = true;
+                        selectFornecedor.appendChild(opt);
+                    });
+                }
             }
         }
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const formCadastro = document.querySelector('.formulario-cadastro form');
-    if (formCadastro) {
-        formCadastro.onsubmit = async function(e) {
-            e.preventDefault();
-            const dados = {
-                descricao_breve: document.getElementById('descricao-breve').value,
-                fabricante: document.getElementById('fabricante').value,
-                valor: Number(document.getElementById('valor').value) || 0,
-                quantidade: Number(document.getElementById('quantidade').value) || 0,
-                codigo_fabricante: document.getElementById('codigo-fabricante').value,
-                descricao_completa: document.getElementById('descricao-completa').value,
-                und_medida: document.getElementById('und-medida').value,
-                fornecedor: document.getElementById('fornecedor').value,
-                quantidade_segura: Number(document.getElementById('quantidade-segura').value) || 0
-            };
-            const resp = await fetch('http://localhost:3000/materiais', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(dados)
-            });
-            if (resp.ok) {
-                alert('Material cadastrado com sucesso!');
-                window.location.href = 'menu.html'; 
-            } else {
-                alert('Erro ao cadastrar material!');
-            }
-        };
-    }
-});
-
+// Função para formatar o código interno (adicione se não tiver)
 function formatarCodigoInterno(codigo) {
     let str = codigo.toString().padStart(8, '0');
     return str.replace(/(\d{2})(\d{3})(\d{3})/, '$1.$2.$3');
@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const botoesEdicao = document.querySelector('.botoes-edicao');
     const campos = [
         'descricao-breve', 'descricao-completa', 'fabricante', 'codigo-fabricante',
-        'fornecedor', 'valor', 'und-medida', 'quantidade-segura', 'quantidade'
+        'fornecedor', 'valor', 'valor-custo', 'und-medida', 'quantidade-segura', 'quantidade'
     ];
 
     if (btnEditar && botoesEdicao) {
@@ -379,13 +379,32 @@ document.addEventListener('DOMContentLoaded', function() {
             botoesEdicao.style.display = 'none';
         };
     }
+
     if (btnConfirmar) {
         btnConfirmar.onclick = async function() {
             const id = getParametroUrl('id');
             const dados = {};
             campos.forEach(idCampo => {
-                const campo = document.getElementById(idCampo);
-                if (campo) dados[idCampo.replace(/-/g, '_')] = campo.value;
+                if (idCampo === 'fornecedor') {
+                    // Pega o valor do select se estiver visível, senão do input
+                    const selectFornecedor = document.getElementById('select-fornecedor');
+                    const inputFornecedor = document.getElementById('fornecedor');
+                    if (selectFornecedor && selectFornecedor.style.display !== 'none') {
+                        dados['fornecedor'] = selectFornecedor.value;
+                    } else if (inputFornecedor) {
+                        // Se não estiver editando, mantém o valor antigo (pode ser só o código)
+                        dados['fornecedor'] = (inputFornecedor.value || '').split(' - ')[0];
+                    }
+                } else {
+                    const campo = document.getElementById(idCampo);
+                    if (campo) {
+                        if (idCampo === 'valor' || idCampo === 'valor-custo') {
+                            dados[idCampo.replace(/-/g, '_')] = Number(campo.value.replace(/\D/g, "")) / 100;
+                        } else {
+                            dados[idCampo.replace(/-/g, '_')] = campo.value;
+                        }
+                    }
+                }
             });
             const resp = await fetch(`http://localhost:3000/materiais/${id}`, {
                 method: 'PUT',
@@ -465,3 +484,333 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 });
+
+document.addEventListener('DOMContentLoaded', async function() {
+    if (window.location.pathname.endsWith('consulta-fornecedor.html')) {
+        const tbody = document.getElementById('tbody-fornecedores');
+        const inputBusca = document.querySelector('.input-busca-fornecedor');
+        const btnLupa = document.querySelector('.icone-lupa-fornecedor');
+        let fornecedoresCache = [];
+
+        async function carregarFornecedores() {
+            const resp = await fetch('http://localhost:3000/fornecedores');
+            const fornecedores = await resp.json();
+            fornecedoresCache = fornecedores;
+            renderizarTabela(fornecedores);
+        }
+
+        function renderizarTabela(fornecedores) {
+            tbody.innerHTML = '';
+            fornecedores.forEach(f => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${f.id}</td>
+                        <td>${f.nome}</td>
+                        <td>${f.cnpj}</td>
+                        <td>${f.telefone}</td>
+                        <td>${f.email}</td>
+                        <td>
+                            <button onclick="window.location.href='detalhes-fornecedor.html?id=${f.id}'">
+                                <img src="../imagens/Olho.png" class="icone-olho" alt="Olho">
+                                VISUALIZAR
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function filtrarFornecedores() {
+            const termo = (inputBusca.value || '').trim().toLowerCase();
+            const filtrados = fornecedoresCache.filter(f =>
+                (f.id && f.id.toString().includes(termo)) ||
+                (f.nome && f.nome.toLowerCase().includes(termo)) ||
+                (f.cnpj && f.cnpj.toLowerCase().includes(termo)) ||
+                (f.telefone && f.telefone.toLowerCase().includes(termo)) ||
+                (f.email && f.email.toLowerCase().includes(termo))
+            );
+            renderizarTabela(filtrados);
+        }
+
+        if (inputBusca) inputBusca.addEventListener('input', filtrarFornecedores);
+        if (btnLupa) btnLupa.addEventListener('click', filtrarFornecedores);
+
+        carregarFornecedores();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', async function() {
+    if (window.location.pathname.endsWith('detalhes-fornecedor.html')) {
+        const id = getParametroUrl('id');
+        const campos = [
+            'id', 'nome', 'razao-social', 'cnpj', 'inscricao-estadual',
+            'logradouro', 'numero', 'bairro', 'municipio', 'estado', 'telefone', 'email'
+        ];
+        if (id) {
+            const resp = await fetch(`http://localhost:3000/fornecedores/${id}`);
+            if (resp.ok) {
+                const f = await resp.json();
+                campos.forEach(campo => {
+                    const el = document.getElementById(campo);
+                    if (el) el.value = f[campo.replace(/-/g, '_')] || '';
+                });
+                // Exibe o código do fornecedor no cabeçalho
+                const spanCodigo = document.querySelector('.codigo-interno');
+                if (spanCodigo) {
+                    spanCodigo.textContent = 'CÓDIGO FORNECEDOR - ' + f.id;
+                }
+            } else {
+                alert('Fornecedor não encontrado!');
+                window.location.href = 'consulta-fornecedor.html';
+            }
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.endsWith('detalhes-fornecedor.html')) {
+        const btnEditar = document.querySelector('.icone-formulario[alt="Editar"]');
+        const btnExcluir = document.querySelector('.icone-formulario[alt="Excluir"]');
+        const form = document.getElementById('form-detalhes-fornecedor');
+        const campos = [
+            'nome', 'razao-social', 'cnpj', 'inscricao-estadual',
+            'logradouro', 'numero', 'bairro', 'municipio', 'estado', 'telefone', 'email'
+        ];
+        let valoresOriginais = {};
+
+        // Editar
+        if (btnEditar && form) {
+            btnEditar.addEventListener('click', function() {
+                // Salva valores originais
+                campos.forEach(id => {
+                    const campo = document.getElementById(id);
+                    if (campo) {
+                        valoresOriginais[id] = campo.value;
+                        campo.removeAttribute('readonly');
+                    }
+                });
+                // Mostra botões de salvar/cancelar (opcional)
+                if (!document.querySelector('.botoes-edicao')) {
+                    const div = document.createElement('div');
+                    div.className = 'botoes-edicao';
+                    div.style.display = 'flex';
+                    div.style.gap = '16px';
+                    div.innerHTML = `
+                        <button type="button" class="btn-confirmar-edicao">CONFIRMAR ✔</button>
+                        <button type="button" class="btn-cancelar-edicao">CANCELAR ✖</button>
+                    `;
+                    form.appendChild(div);
+
+                    // Salvar edição
+                    div.querySelector('.btn-confirmar-edicao').onclick = async function() {
+                        const idFornecedor = getParametroUrl('id');
+                        const dados = {};
+                        campos.forEach(idCampo => {
+                            const campo = document.getElementById(idCampo);
+                            if (campo) dados[idCampo.replace(/-/g, '_')] = campo.value;
+                        });
+                        const resp = await fetch(`http://localhost:3000/fornecedores/${idFornecedor}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(dados)
+                        });
+                        if (resp.ok) {
+                            alert('Fornecedor atualizado!');
+                            window.location.reload();
+                        } else {
+                            alert('Erro ao atualizar fornecedor!');
+                        }
+                    };
+
+                    // Cancelar edição
+                    div.querySelector('.btn-cancelar-edicao').onclick = function() {
+                        campos.forEach(id => {
+                            const campo = document.getElementById(id);
+                            if (campo) {
+                                campo.value = valoresOriginais[id];
+                                campo.setAttribute('readonly', true);
+                            }
+                        });
+                        div.remove();
+                    };
+                }
+            });
+        }
+    }
+});
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.endsWith('detalhes-fornecedor.html')) {
+        const btnExcluir = document.querySelector('.icone-formulario[alt="Excluir"]');
+        const modal = document.getElementById('modal-excluir-fornecedor');
+        if (btnExcluir && modal) {
+            btnExcluir.onclick = function() {
+                modal.style.display = 'flex';
+            };
+            // Botão cancelar fecha o modal
+            modal.querySelector('.btn-cancelar').onclick = function() {
+                modal.style.display = 'none';
+            };
+            // Botão confirmar faz a exclusão
+            modal.querySelector('.btn-excluir').onclick = async function() {
+                const idFornecedor = getParametroUrl('id');
+                const resp = await fetch(`http://localhost:3000/fornecedores/${idFornecedor}`, {
+                    method: 'DELETE'
+                });
+                if (resp.ok) {
+                    alert('Fornecedor excluído!');
+                    window.location.href = 'consulta-fornecedor.html';
+                } else {
+                    alert('Erro ao excluir fornecedor!');
+                }
+            };
+        }
+    }
+});
+
+function formatarMoeda(valor) {
+    valor = valor.replace(/\D/g, "");
+    valor = (parseInt(valor, 10) / 100).toFixed(2) + "";
+    valor = valor.replace(".", ",");
+    valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    return "R$ " + valor;
+}
+
+function aplicarMascaraMoeda(input) {
+    input.addEventListener('input', function(e) {
+        let valor = e.target.value.replace(/\D/g, "");
+        if (valor === "") valor = "0";
+        valor = (parseInt(valor, 10) / 100).toFixed(2);
+        valor = valor.replace(".", ",");
+        valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        e.target.value = "R$ " + valor;
+    });
+}
+
+// Ao carregar a página, aplique a máscara nos campos desejados:
+document.addEventListener('DOMContentLoaded', function() {
+    const campoCusto = document.getElementById('valor-custo');
+    const campoVenda = document.getElementById('valor');
+    if (campoCusto) aplicarMascaraMoeda(campoCusto);
+    if (campoVenda) aplicarMascaraMoeda(campoVenda);
+});
+
+document.addEventListener('DOMContentLoaded', async function() {
+    const selectFornecedor = document.getElementById('fornecedor');
+    if (selectFornecedor) {
+        const resp = await fetch('http://localhost:3000/fornecedores');
+        if (resp.ok) {
+            const fornecedores = await resp.json();
+            fornecedores.forEach(f => {
+                const opt = document.createElement('option');
+                opt.value = f.id;
+                opt.textContent = `${f.id} - ${f.nome}`;
+                selectFornecedor.appendChild(opt);
+            });
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const btnEditar = document.querySelector('.icone-formulario[alt="Editar"]');
+    const inputFornecedor = document.getElementById('fornecedor');
+    const selectFornecedor = document.getElementById('select-fornecedor');
+
+    if (btnEditar && inputFornecedor && selectFornecedor) {
+        btnEditar.addEventListener('click', function() {
+            inputFornecedor.style.display = 'none';
+            selectFornecedor.style.display = '';
+            selectFornecedor.disabled = false;
+        });
+    }
+
+    // Se quiser voltar ao modo visualizacao ao cancelar edicao:
+    const btnCancelar = document.querySelector('.btn-cancelar-edicao');
+    if (btnCancelar && inputFornecedor && selectFornecedor) {
+        btnCancelar.addEventListener('click', function() {
+            inputFornecedor.style.display = '';
+            selectFornecedor.style.display = 'none';
+            selectFornecedor.disabled = true;
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const btnEditar = document.querySelector('.icone-formulario[alt="Editar"]');
+    const btnCancelar = document.querySelector('.btn-cancelar-edicao');
+    const inputFornecedor = document.getElementById('fornecedor');
+    const selectFornecedor = document.getElementById('select-fornecedor');
+
+    // Ao clicar em editar, mostra o select e esconde o input
+    if (btnEditar && inputFornecedor && selectFornecedor) {
+        btnEditar.addEventListener('click', function() {
+            inputFornecedor.style.display = 'none';
+            selectFornecedor.style.display = '';
+            selectFornecedor.disabled = false;
+        });
+    }
+
+    // Ao clicar em cancelar, volta para o input readonly
+    if (btnCancelar && inputFornecedor && selectFornecedor) {
+        btnCancelar.addEventListener('click', function() {
+            inputFornecedor.style.display = '';
+            selectFornecedor.style.display = 'none';
+            selectFornecedor.disabled = true;
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tbody = document.getElementById('tbody-materiais');
+
+    async function carregarMateriais() {
+        // Busca materiais e fornecedores em paralelo
+        const [respMateriais, respFornecedores] = await Promise.all([
+            fetch('http://localhost:3000/materiais'),
+            fetch('http://localhost:3000/fornecedores')
+        ]);
+        const materiais = await respMateriais.json();
+        const fornecedores = await respFornecedores.json();
+
+        // Cria um mapa de id => nome
+        const mapaFornecedores = {};
+        fornecedores.forEach(f => {
+            mapaFornecedores[f.id] = f.nome;
+        });
+
+        renderizarTabela(materiais, mapaFornecedores);
+    }
+
+    function renderizarTabela(materiais, mapaFornecedores) {
+        tbody.innerHTML = '';
+        materiais.forEach(mat => {
+            // Monta o texto "código - nome" se existir fornecedor
+            let fornecedorTexto = '';
+            if (mat.fornecedor && mapaFornecedores[mat.fornecedor]) {
+                fornecedorTexto = `${mat.fornecedor} - ${mapaFornecedores[mat.fornecedor]}`;
+            } else if (mat.fornecedor) {
+                fornecedorTexto = mat.fornecedor;
+            }
+            tbody.innerHTML += `
+                <tr>
+                    <td>${mat.id ? formatarCodigoInterno(mat.id) : ''}</td>
+                    <td>${mat.descricao_breve}</td>
+                    <td>${mat.fabricante}</td>
+                    <td>${mat.codigo_fabricante}</td>
+                    <td>R$ ${Number(mat.valor).toFixed(2)}</td>
+                    <td>${mat.quantidade}</td>
+                    <td>${mat.und_medida}</td>
+                    <td>${fornecedorTexto}</td>
+                    <td>
+                        <button onclick="window.location.href='detalhes-material.html?id=${mat.id}'">
+                            <img src="../imagens/Olho.png" class="icone-olho" alt="Olho">
+                            VISUALIZAR
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    carregarMateriais();
+});
+

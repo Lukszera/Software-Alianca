@@ -6,24 +6,44 @@ body {
 }
 
 header {
-    text-align: center;
-    margin-bottom: 20px;
-    background-color: #00A54F;
-    border-bottom: 5px solid #DBC056;
-    padding: 10px 0;
+  background-color: #00A54F;
+  text-align: center;
+  margin: -2px; 
+  border-bottom: 5px solid #DBC056
+  ;
 }
 
 h2 {
     text-align: center;
     color: #00A54F;
-    margin-top: 20px;
+    margin-top: 30px;
     margin-bottom: 30px;
-    font-size: 1.7em;
+    font-size: 1.9em;
     letter-spacing: 1px;
 }
 
+.icone-voltar {
+  position: absolute;
+  top: 173px;   /* ajuste conforme necessário para a distância do header */
+  left: 35px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+}
+
+.icone-voltar img {
+  width: 40px;
+  height: 40fipx;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+
+.icone-voltar img:hover {
+  filter: brightness(0.85);
+}
+
 .tabela-fornecedor {
-    width: 70%;
+    width: 55%;
     margin: 0 auto 40px auto;
     border-collapse: collapse;
     background: #fff;
@@ -50,7 +70,67 @@ h2 {
     border-bottom: none;
 }
 
-.tabela-fornecedor tr:hover {
-    background: #f2f2f2;
+.tabela-fornecedor button {
+    background-color: #DBC056;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+    height: 42px;
+    width: 185px;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza ícone e texto juntos */
+    gap: 8px;                /* Espaço entre ícone e texto */
     transition: background 0.2s;
+    margin-left: 45px;
+}
+
+.tabela-fornecedor th, .tabela-fornecedor td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #eee;
+    text-align: center;           /* Centraliza horizontalmente */
+    vertical-align: middle;       /* Centraliza verticalmente */
+    font-size: 1.1em;
+}
+
+.tabela-fornecedor button:hover {
+    background-color: #caae3d;
+}
+
+.tabela-fornecedor tr:nth-child(even) td {
+    background-color: #F5F5F5; /* Cor alternada para linhas pares */
+}
+
+.icone-olho {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    background-color: white;
+    border-radius: 75px;
+}
+
+.pesquisa-tabela {
+    display: flex;
+    align-items: left;
+    gap: 10px;
+}
+
+.input-busca-fornecedor {
+    width: 230px;
+    padding: 8px 12px;
+    border: 2px solid #DBC056;
+    border-radius: 6px;
+    font-size: 15px;
+    background: #fff;
+    font-family: inherit;
+}
+
+.icone-lupa-fornecedor {
+    width: 35px;
+    height: 35px;
+    transition: filter 0.2s;
 }

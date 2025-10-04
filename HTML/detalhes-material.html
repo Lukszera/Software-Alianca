@@ -40,6 +40,7 @@
     </div>
 
     <form>
+
         <label for="descricao-breve">DESCRIÇÃO BREVE:</label>
         <input type="text" id="descricao-breve" name="descricao-breve" readonly>
 
@@ -54,10 +55,19 @@
 
         <label for="fornecedor">FORNECEDOR:</label>
         <input type="text" id="fornecedor" name="fornecedor" readonly>
-
-        <label for="valor">VALOR:</label>
+        <select id="select-fornecedor" name="select-fornecedor" style="display:none;">
+            <option value="">Selecione o fornecedor</option>
+            <!-- Opções preenchidas pelo JS -->
+        </select>
+        
+        <label for="valor-custo">VALOR DE CUSTO:</label>
         <div class="valor-wrapper">
-            <input type="number" id="valor" name="valor" min="0" step="0.01" readonly>
+            <input type="text" id="valor-custo" name="valor-custo" min="0" step="0.01" readonly>
+        </div>
+
+        <label for="valor">VALOR DE VENDA:</label>
+        <div class="valor-wrapper">
+            <input type="text" id="valor" name="valor" min="0" step="0.01" readonly>
         </div>
 
         <label for="und-medida">UNIDADE DE MEDIDA:</label>
@@ -75,6 +85,7 @@
 
         <label for="quantidade">QUANTIDADE:</label>
         <input type="text" id="quantidade" name="quantidade" readonly>
+
     </form>
 
     <div id="modal-arquivos" class="modal-arquivos">
@@ -92,3 +103,5 @@
 </div>
 
 <script src="../funcoes.js"></script>
+</body>
+</html>

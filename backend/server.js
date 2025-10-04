@@ -26,7 +26,8 @@ app.post('/materiais', async (req, res) => {
   let {
     descricao_breve,
     fabricante,
-    valor,
+    valor, // valor de venda
+    valor_custo,
     codigo_fabricante,
     descricao_completa,
     quantidade,
@@ -36,17 +37,19 @@ app.post('/materiais', async (req, res) => {
   } = req.body;
 
   valor = Number(valor) || 0;
+  valor_custo = Number(valor_custo) || 0;
   quantidade = Number(quantidade) || 0;
   quantidade_segura = Number(quantidade_segura) || 0;
 
   try {
+    // Exemplo de INSERT
     await pool.query(
       `INSERT INTO materiais (
-        descricao_breve, fabricante, valor, codigo_fabricante,
+        descricao_breve, fabricante, valor, valor_custo, codigo_fabricante,
         descricao_completa, quantidade, und_medida, fornecedor, quantidade_segura
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
-        descricao_breve, fabricante, valor, codigo_fabricante,
+        descricao_breve, fabricante, valor, valor_custo, codigo_fabricante,
         descricao_completa, quantidade, und_medida, fornecedor, quantidade_segura
       ]
     );
@@ -66,11 +69,24 @@ app.get('/materiais', async (req, res) => {
   }
 });
 
+app.get('/fornecedores/:id', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM fornecedores WHERE id = $1', [req.params.id]);
+    if (result.rows.length > 0) {
+      res.json(result.rows[0]);
+    } else {
+      res.status(404).json({ error: 'Fornecedor não encontrado' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.listen(3000, () => console.log('Servidor rodando na porta 3000'));
 
 app.get('/materiais/:id', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM materiais WHERE id = $1', [req.params.id]);
+    const result = await pool.query('SELECT *, valor_custo FROM materiais WHERE id = $1', [req.params.id]);
     if (result.rows.length > 0) {
       res.json(result.rows[0]);
     } else {
@@ -93,7 +109,7 @@ app.delete('/materiais/:id', async (req, res) => {
 app.put('/materiais/:id', async (req, res) => {
   const {
     descricao_breve, descricao_completa, fabricante, codigo_fabricante,
-    fornecedor, valor, und_medida, quantidade_segura, quantidade
+    fornecedor, valor, valor_custo, und_medida, quantidade_segura, quantidade
   } = req.body;
   try {
     await pool.query(
@@ -104,11 +120,15 @@ app.put('/materiais/:id', async (req, res) => {
         codigo_fabricante = $4,
         fornecedor = $5,
         valor = $6,
-        und_medida = $7,
-        quantidade_segura = $8,
-        quantidade = $9
-      WHERE id = $10`,
-      [descricao_breve, descricao_completa, fabricante, codigo_fabricante, fornecedor, valor, und_medida, quantidade_segura, quantidade, req.params.id]
+        valor_custo = $7,
+        und_medida = $8,
+        quantidade_segura = $9,
+        quantidade = $10
+      WHERE id = $11`,
+      [
+        descricao_breve, descricao_completa, fabricante, codigo_fabricante, fornecedor,
+        valor, valor_custo, und_medida, quantidade_segura, quantidade, req.params.id
+      ]
     );
     res.json({ message: 'Material atualizado!' });
   } catch (err) {
@@ -186,9 +206,41 @@ app.post('/fornecedores', async (req, res) => {
 
 app.get('/fornecedores', async (req, res) => {
   try {
-    const result = await pool.query('SELECT id, nome, cnpj, telefone, email FROM fornecedores ORDER BY id');
+    const result = await pool.query('SELECT * FROM fornecedores ORDER BY id');
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
+
+// Atualizar fornecedor
+app.put('/fornecedores/:id', async (req, res) => {
+  const {
+    nome, razao_social, cnpj, inscricao_estadual, logradouro,
+    numero, bairro, municipio, estado, telefone, email
+  } = req.body;
+  try {
+    await pool.query(
+      `UPDATE fornecedores SET
+        nome = $1, razao_social = $2, cnpj = $3, inscricao_estadual = $4,
+        logradouro = $5, numero = $6, bairro = $7, municipio = $8,
+        estado = $9, telefone = $10, email = $11
+      WHERE id = $12`,
+      [nome, razao_social, cnpj, inscricao_estadual, logradouro, numero, bairro, municipio, estado, telefone, email, req.params.id]
+    );
+    res.json({ message: 'Fornecedor atualizado!' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Excluir fornecedor
+app.delete('/fornecedores/:id', async (req, res) => {
+  try {
+    await pool.query('DELETE FROM fornecedores WHERE id = $1', [req.params.id]);
+    res.json({ message: 'Fornecedor excluído!' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+

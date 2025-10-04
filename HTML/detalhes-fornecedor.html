@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Fornecedor</title>
+    <link rel="stylesheet" href="../css/detalhes-fornecedor.css">
+</head>
+<body>
+    <header>
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
+        <a href="consulta-fornecedor.html" class="icone-voltar">
+            <img src="../imagens/voltar.png" alt="Voltar">
+        </a>
+    </header>
+    <div class="formulario-detalhes">
+        <form id="form-detalhes-fornecedor">
+        <div class="cabecalho-formulario">
+            <span class="codigo-interno"></span>
+            <img src="../imagens/lapis.png" alt="Editar" class="icone-formulario">
+            <img src="../imagens/excluir.png" alt="Excluir" class="icone-formulario">
+        </div> 
+            <div class="grupo-campos">
+                <label for="nome">NOME:</label>
+                <input type="text" id="nome" name="nome" readonly>
+                <label for="razao-social">RAZÃO SOCIAL:</label>
+                <input type="text" id="razao-social" name="razao-social" readonly>
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj" name="cnpj" readonly>
+                <label for="inscricao-estadual">INSCRIÇÃO ESTADUAL:</label>
+                <input type="text" id="inscricao-estadual" name="inscricao-estadual" readonly>
+                <label for="logradouro">LOGRADOURO:</label>
+                <input type="text" id="logradouro" name="logradouro" readonly>
+                <label for="numero">NÚMERO:</label>
+                <input type="text" id="numero" name="numero" readonly>
+                <label for="bairro">BAIRRO:</label>
+                <input type="text" id="bairro" name="bairro" readonly>
+                <label for="municipio">MUNICÍPIO:</label>
+                <input type="text" id="municipio" name="municipio" readonly>
+                <label for="estado">ESTADO:</label>
+                <input type="text" id="estado" name="estado" readonly>
+                <label for="telefone">TELEFONE:</label>
+                <input type="text" id="telefone" name="telefone" readonly>
+                <label for="email">E-MAIL:</label>
+                <input type="text" id="email" name="email" readonly>
+            </div>
+        </form>
+
+        <div id="modal-excluir-fornecedor" class="modal-excluir">
+            <div class="modal-conteudo">
+                <div class="modal-titulo">VOCÊ TEM CERTEZA QUE DESEJA EXCLUIR ESTE FORNECEDOR?</div>
+                <div class="modal-botoes">
+                    <button class="btn-excluir">CONFIRMAR ✔</button>
+                    <button class="btn-cancelar">CANCELAR ✖</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="../funcoes.js"></script>
+</body>
+</html>
