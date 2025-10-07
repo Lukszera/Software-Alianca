@@ -327,3 +327,37 @@ select:disabled {
     -webkit-text-fill-color: #222 !important; /* Safari */
     cursor: not-allowed;           /* Mostra que está desabilitado */
 }
+
+#notificacao {
+  display: none;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 320px;
+  max-width: 90vw;
+  z-index: 1000;
+  padding: 18px 30px;
+  border-radius: 8px;
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  transition: opacity 0.3s;
+}
+
+.formulario-detalhes {
+  position: relative;
+}
+
+#notificacao.sucesso {
+  background-color: #d4f8e8;
+  color: #007e3a;
+  border: 2px solid #00A54F;
+}
+
+#notificacao.erro {
+  background-color: #ffeaea;
+  color: #b30000;
+  border: 2px solid #e57373;
+}

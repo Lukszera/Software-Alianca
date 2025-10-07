@@ -98,10 +98,38 @@ header {
   margin-bottom: 15px;
 }
 
+.botao-historico {
+  background-color: #00A54F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer; 
+}
+
+.botao-estoque-baixo {
+  background-color: #00A54F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer; 
+}
+
 .botao-cadastro,
 .botao-movimentacao,
 .botao-fornecedor,
-.botao-consulta-fornecedor {
+.botao-consulta-fornecedor,
+.botao-historico,
+.botao-estoque-baixo {
   margin-bottom: 15px; 
 }
 
