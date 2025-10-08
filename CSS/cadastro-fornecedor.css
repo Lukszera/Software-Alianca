@@ -1,0 +1,104 @@
+body {
+  background-color: #E6E6E6;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+header {
+  background-color: #00A54F;
+  text-align: center;
+  margin: -10px;
+  border-bottom: 5px solid #DBC056;
+}
+
+.formulario-cadastro {
+  width: 720px;
+  margin: 70px auto;
+  padding: 30px;
+  border: 4px solid #00A54F;
+  background-color: #E6E6E6;
+  border-radius: 10px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+
+.formulario-cadastro h2 {
+  text-align: center;
+  color: white;
+  background-color: #00A54F;
+  padding: 15px;
+  margin: -30px -30px 30px -30px;
+  font-size: 20px;
+}
+
+.formulario-cadastro label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.formulario-cadastro input,
+.formulario-cadastro textarea {
+  width: 100%;
+  padding: 7px;
+  margin-bottom: 20px;
+  border: 2px solid #DBC056;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 18px;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+}
+
+.formulario-cadastro input:focus,
+.formulario-cadastro textarea:focus {
+  border: 2px solid #00A54F !important;
+  outline: none;
+}
+
+.botoes {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 5px;
+}
+
+.botao-salvar {
+  background-color: #00A54F;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.botao-salvar:hover {
+  background-color: #078343;
+}
+
+.botao-cancelar {
+  background-color: #DBC056;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.botao-cancelar:hover {
+  background-color: #caae3d;
+}

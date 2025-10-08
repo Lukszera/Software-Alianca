@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Fornecedores</title>
+    <link rel="stylesheet" href="../css/consulta-fornecedor.css">
+</head>
+<body>
+    <header>
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
+
+        <a href="menu.html" class="icone-voltar">
+        <img src="../imagens/voltar.png" alt="Voltar">
+    </a>
+    </header>
+
+    <h2>CONSULTA DE FORNECEDORES</h2>
+
+    <table class="tabela-fornecedor">
+        <thead>
+            <tr>
+                <th>CÓDIGO</th>
+                <th>NOME</th>
+                <th>CNPJ</th>
+                <th>TELEFONE</th>
+                <th>E-MAIL</th>
+                <th>
+                    <div class="pesquisa-tabela">
+                        <input type="text" placeholder="Buscar fornecedor" class="input-busca-fornecedor">
+                        <img src="../imagens/lupa.png" class="icone-lupa-fornecedor" alt="Search">
+                    </div>
+                </th>
+            </tr>
+        </thead>
+        <tbody id="tbody-fornecedores">
+        </tbody>
+    </table>
+        </table>
+
+<script src="../funcoes.js"></script>
+
+</body>
+</html>

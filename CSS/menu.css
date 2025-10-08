@@ -71,8 +71,38 @@ header {
   cursor: pointer; 
 }
 
-.botao-cadastro + .botao-movimentacao {
-    margin-top: 15px;
+.botao-fornecedor {
+  background-color: #00A54F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer; 
+}
+
+.botao-consulta-fornecedor {
+  background-color: #00A54F;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: 45px;
+  padding: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.botao-cadastro,
+.botao-movimentacao,
+.botao-fornecedor,
+.botao-consulta-fornecedor {
+  margin-bottom: 15px; 
 }
 
 .botao-cadastro:hover {
@@ -86,6 +116,7 @@ header {
   top: 270px;
   left: 530px; /* Ajuste a posição horizontal conforme necessário */
   max-height: 830px; /* Define uma altura máxima para a rolagem */
+  border-radius: 7px; 
 }
 
 /* Estilização da barra de rolagem */
@@ -129,7 +160,6 @@ header {
   top: 0;
   z-index: 2;
   border: 3px solid #00A54F;
-  border-bottom: none;
 }
 
 .tabela-estoque td {
@@ -138,7 +168,7 @@ header {
 }
 
 .tabela-estoque tr:nth-child(even) td {
-  background-color: #F5F5F5; /* Cor alternada para linhas pares */
+  background-color: #f8f8f8; /* Cor alternada para linhas pares */
 }
 
 .tabela-estoque button {
@@ -149,8 +179,8 @@ header {
   padding: 5px 10px;
   cursor: pointer;
   font-weight: bold; 
-  font-size: 16px; /* Aumenta o tamanho da fonte */
-  height: 50px;
+  font-size: 15px; /* Aumenta o tamanho da fonte */
+  height: 42px;
   width: 180px;
   display: flex;
   align-items: center;
@@ -168,3 +198,4 @@ header {
   background-color: white; /* Define o fundo branco */
   border-radius: 75px; /* Opcional: arredonda as bordas */
 }
+
