@@ -56,10 +56,19 @@
             <input type="text" id="fornecedor" name="fornecedor" readonly>
 
             <label for="valor">VALOR:</label>
-            <input type="text" id="valor" name="valor" readonly>
+            <div class="valor-wrapper">
+                <input type="number" id="valor" name="valor" min="0" step="0.01" readonly>
+            </div>
 
             <label for="und-medida">UNIDADE DE MEDIDA:</label>
-            <input type="text" id="und-medida" name="und-medida" readonly>
+            <select id="und-medida" name="und-medida" disabled>
+                <option value="M">M</option>
+                <option value="UN">UN</option>
+                <option value="KG">KG</option>
+                <option value="L">L</option>
+                <option value="m2">M2</option>
+                <option value="m3">M3</option>
+            </select>
 
             <label for="quantidade-segura">QUANTIDADE SEGURA:</label>
             <input type="text" id="quantidade-segura" name="quantidade-segura" readonly>
