@@ -69,6 +69,23 @@ app.get('/materiais', async (req, res) => {
   }
 });
 
+app.get('/materiais/estoque-baixo', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT m.id, m.descricao_breve, m.fabricante, m.quantidade, m.und_medida, m.valor_custo,
+             m.fornecedor, f.nome as fornecedor_nome
+      FROM materiais m
+      LEFT JOIN fornecedores f ON m.fornecedor = f.id::text
+      WHERE m.quantidade <= m.quantidade_segura
+      ORDER BY m.id ASC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 app.get('/fornecedores/:id', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM fornecedores WHERE id = $1', [req.params.id]);
@@ -277,18 +294,3 @@ app.get('/historico/:material_id', async (req, res) => {
   }
 });
 
-app.get('/materiais/estoque-baixo', async (req, res) => {
-  try {
-    const result = await pool.query(`
-      SELECT m.id, m.descricao_breve, m.fabricante, m.quantidade, m.und_medida, m.valor_custo,
-             m.fornecedor, f.nome as fornecedor_nome
-      FROM materiais m
-      LEFT JOIN fornecedores f ON CAST(m.fornecedor AS integer) = f.id
-      WHERE m.quantidade <= m.quantidade_segura
-      ORDER BY m.quantidade ASC
-    `);
-    res.json(result.rows);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});

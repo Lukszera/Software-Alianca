@@ -428,6 +428,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 notificacao.textContent = "Material atualizado com sucesso!";
                 notificacao.className = "sucesso";
                 notificacao.style.display = "block";
+                // Verifica se atingiu a quantidade segura
+                const matResp = await fetch(`http://localhost:3000/materiais/${id}`);
+                if (matResp.ok) {
+                    const mat = await matResp.json();
+                    if (mat.quantidade <= mat.quantidade_segura) {
+                        mostrarNotificacaoEstoqueBaixo(mat.id, mat.descricao_breve);
+                    }
+                }
                 setTimeout(() => {
                     notificacao.style.display = "none";
                     window.location.reload();
@@ -453,7 +461,6 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             const tipo = document.getElementById('tipo-mov').value;
             let codigo_interno = document.getElementById('codigo-interno').value.trim();
-            // Remove pontos do código formatado
             codigo_interno = codigo_interno.replace(/\./g, '');
             const quantidade = Number(document.getElementById('quantidade-mov').value);
             const resp = await fetch('http://localhost:3000/materiais/movimentacao', {
@@ -465,8 +472,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (resp.ok) {
                 mensagemMov.textContent = resultado.message + ' Nova quantidade: ' + resultado.novaQuantidade;
                 mensagemMov.style.color = 'green';
+
+                // Verifica se atingiu a quantidade segura
+                const matResp = await fetch(`http://localhost:3000/materiais/${codigo_interno}`);
+                if (matResp.ok) {
+                    const mat = await matResp.json();
+                    if (mat.quantidade <= mat.quantidade_segura) {
+                        mostrarNotificacaoEstoqueBaixo(mat.id, mat.descricao_breve);
+                    }
+                }
+
                 setTimeout(() => {
-                    window.location.href = 'menu.html'; // Corrija aqui
+                    window.location.href = 'menu.html';
                 }, 1200);
             } else {
                 mensagemMov.textContent = resultado.error;
@@ -475,6 +492,17 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 });
+
+// Função para mostrar notificação no canto inferior direito
+function mostrarNotificacaoEstoqueBaixo(codigo, nomeMaterial) {
+    // Formata o código interno
+    const codigoFormatado = formatarCodigoInterno(codigo);
+    // Salva a mensagem no localStorage
+    localStorage.setItem(
+        'notificacaoEstoqueBaixo',
+        `O material <b>${codigoFormatado} - ${nomeMaterial}</b> atingiu a quantidade segura`
+    );
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const formFornecedor = document.getElementById('form-fornecedor');
@@ -875,6 +903,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (window.location.pathname.endsWith('historico-movimentacoes.html')) {
         const form = document.getElementById('form-historico');
         const tabela = document.getElementById('tabela-historico');
+        const wrapper = document.querySelector('.tabela-historico-wrapper');
+        wrapper.style.display = 'none'; // ou ''
         const tbody = tabela.querySelector('tbody');
         const mensagem = document.getElementById('mensagem-hist');
 
@@ -911,6 +941,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
             });
             tabela.style.display = '';
+            wrapper.style.display = ''; // para mostrar
         };
     }
 });
@@ -968,7 +999,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 materiais.forEach(mat => {
                     tbody.innerHTML += `
                         <tr>
-                            <td>${mat.id}</td>
+                            <td>${mat.id ? formatarCodigoInterno(mat.id) : ''}</td>
                             <td>${mat.descricao_breve}</td>
                             <td>${mat.fabricante}</td>
                             <td>${mat.fornecedor ? mat.fornecedor + ' - ' + (mat.fornecedor_nome || '') : ''}</td>
@@ -979,5 +1010,26 @@ document.addEventListener('DOMContentLoaded', function() {
                     `;
                 });
             });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const notificacao = document.getElementById('notificacao-estoque-baixo');
+    const msg = localStorage.getItem('notificacaoEstoqueBaixo');
+    if (msg) {
+        if (!notificacao) {
+            // Cria o elemento se não existir
+            const div = document.createElement('div');
+            div.id = 'notificacao-estoque-baixo';
+            div.innerHTML = msg;
+            document.body.appendChild(div);
+        } else {
+            notificacao.innerHTML = msg;
+            notificacao.style.display = 'block';
+        }
+        setTimeout(() => {
+            if (notificacao) notificacao.style.display = 'none';
+            localStorage.removeItem('notificacaoEstoqueBaixo');
+        }, 8000); // 8 segundos
     }
 });

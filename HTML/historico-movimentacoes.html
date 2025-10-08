@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Histórico de Movimentações</title>
     <link rel="stylesheet" href="../css/historico-movimentacoes.css">
+    <link rel="stylesheet" href="../CSS/notificacao.css">
+
 </head>
 <body>
     <header>
@@ -22,6 +24,7 @@
             <button type="submit">CONSULTAR</button>
         </form>
         <div id="mensagem-hist"></div>
+        <div class="tabela-historico-wrapper" style="display:none;">
         <table id="tabela-historico" style="display:none;">
             <thead>
                 <tr>
@@ -36,7 +39,11 @@
             </thead>
             <tbody></tbody>
         </table>
+        </div>
     </div>
+    
     <script src="../funcoes.js"></script>
+    <div id="notificacao-estoque-baixo" style="display:none;"></div>
+
 </body>
 </html>

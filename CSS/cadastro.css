@@ -51,7 +51,7 @@ header {
 
 .formulario-cadastro input, .formulario-cadastro textarea {
   width: 100%;
-  padding: 10px; /* Aumenta o padding dos campos */
+  padding: 9px; /* Aumenta o padding dos campos */
   margin-bottom: 12px; /* Aumenta o espaçamento entre os campos */
   border: 2px solid #DBC056;
   border-radius: 5px;
@@ -182,4 +182,9 @@ header {
   background-color: #ffeaea;
   color: #b30000;
   border: 2px solid #e57373;
+}
+
+#fornecedor {
+  max-height: 180px;      /* ajuste a altura conforme desejar */
+  overflow-y: auto;
 }

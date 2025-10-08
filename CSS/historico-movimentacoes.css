@@ -32,7 +32,7 @@ header {
 
 .form-historico {
   width: 900px;
-  margin: 20px auto;
+  margin: 0px auto;
   padding: 30px;
   border: 4px solid #00A54F;
   background-color: #E6E6E6;
@@ -77,6 +77,11 @@ header {
   background-color: #fff;
   color: #000;
   font-family: 'Roboto', sans-serif;
+}
+
+#form-historico input[type="text"]:focus {
+  border: 2px solid #00A54F;
+  outline: none;
 }
 
 #form-historico button {
@@ -132,5 +137,27 @@ header {
 }
 
 #tabela-historico tr:hover {
-  background: #e6ffe6;
+  background: #ffeeac;
+}
+
+.tabela-historico-wrapper {
+    max-height: 800px;      /* ajuste a altura conforme desejar */
+    overflow-y: auto;
+    margin-top: -25px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+
+/* Barra de rolagem estilizada */
+.tabela-historico-wrapper::-webkit-scrollbar {
+  width: 6px;
+  background: #f2f2f2;
+  border-radius: 8px;
+}
+.tabela-historico-wrapper::-webkit-scrollbar-thumb {
+  background: #DBC056;
+  border-radius: 8px;
+}
+.tabela-historico-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #b89e3b;
 }

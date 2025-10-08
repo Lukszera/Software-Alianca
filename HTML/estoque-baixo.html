@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Materiais com Estoque Baixo</title>
+    <link rel="stylesheet" href="../CSS/estoque-baixo.css">
+    <link rel="stylesheet" href="../CSS/notificacao.css">
+</head>
+<body>
+    <header>
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
+    </header>
+    <a href="menu.html" class="icone-voltar">
+        <img src="../imagens/voltar.png" alt="Voltar">
+    </a>
+    <div class="form-estoque-baixo">
+        <h2>MATERIAIS QUE ATINGIRAM A QUANTIDADE MÍNIMA</h2>
+    <div class="tabela-estoque-baixo-wrapper">
+        <table class="tabela-estoque-baixo">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descrição Breve</th>
+                    <th>Fabricante</th>
+                    <th>Fornecedor</th>
+                    <th>Quantidade</th>
+                    <th>Unidade</th>
+                    <th>Valor de Custo</th>
+                </tr>
+            </thead>
+            <tbody id="tbody-estoque-baixo">
+            </tbody>
+        </table>
+    </div>
+    </div>
+
+    <script src="../funcoes.js"></script>
+    <div id="notificacao-estoque-baixo" style="display:none;"></div>
+    
+</body>
+</html>
