@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico de Movimentações</title>
+    <link rel="stylesheet" href="../css/historico-movimentacoes.css">
+</head>
+<body>
+    <header>
+        <img src="../imagens/Logo4.png" alt="Logo" height="135">
+    </header>
+
+    <a href="menu.html" class="icone-voltar">
+    <img src="../imagens/voltar.png" alt="Voltar">
+    </a>
+
+    <div class="form-historico">
+        <h2>HISTÓRICO DE MOVIMENTAÇÕES</h2>
+        <form id="form-historico">
+            <label for="codigo-interno-hist">CÓDIGO INTERNO:</label>
+            <input type="text" id="codigo-interno-hist" name="codigo-interno-hist" required>
+            <button type="submit">CONSULTAR</button>
+        </form>
+        <div id="mensagem-hist"></div>
+        <table id="tabela-historico" style="display:none;">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Valor Custo</th>
+                    <th>Valor Venda</th>
+                    <th>Fornecedor</th>
+                    <th>Quantidade</th>
+                    <th>Unidade</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <script src="../funcoes.js"></script>
+</body>
+</html>

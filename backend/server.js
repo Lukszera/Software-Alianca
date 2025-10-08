@@ -139,13 +139,13 @@ app.put('/materiais/:id', async (req, res) => {
 app.post('/materiais/movimentacao', async (req, res) => {
   const { tipo, codigo_interno, quantidade } = req.body;
   try {
-    // Busca o material pelo id
     const id = Number(codigo_interno);
-    const result = await pool.query('SELECT quantidade FROM materiais WHERE id = $1', [id]);
+    const result = await pool.query('SELECT * FROM materiais WHERE id = $1', [id]);
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Material não encontrado' });
     }
-    let novaQuantidade = result.rows[0].quantidade;
+    let mat = result.rows[0];
+    let novaQuantidade = mat.quantidade;
     if (tipo === 'entrada') {
       novaQuantidade += Number(quantidade);
     } else if (tipo === 'saida') {
@@ -157,6 +157,23 @@ app.post('/materiais/movimentacao', async (req, res) => {
       return res.status(400).json({ error: 'Tipo de movimentação inválido' });
     }
     await pool.query('UPDATE materiais SET quantidade = $1 WHERE id = $2', [novaQuantidade, id]);
+
+    // Salva no histórico
+    await pool.query(
+      `INSERT INTO historico_movimentacoes
+        (material_id, tipo, valor_custo, valor_venda, fornecedor, quantidade, und_medida)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        id,
+        tipo,
+        mat.valor_custo,
+        mat.valor,
+        Number(mat.fornecedor) || null,
+        quantidade,
+        mat.und_medida
+      ]
+    );
+
     res.json({ message: 'Movimentação realizada com sucesso!', novaQuantidade });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -244,3 +261,34 @@ app.delete('/fornecedores/:id', async (req, res) => {
   }
 });
 
+app.get('/historico/:material_id', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT h.*, f.nome as fornecedor_nome
+       FROM historico_movimentacoes h
+       LEFT JOIN fornecedores f ON h.fornecedor = f.id
+       WHERE h.material_id = $1
+       ORDER BY h.data DESC`,
+      [req.params.material_id]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/materiais/estoque-baixo', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT m.id, m.descricao_breve, m.fabricante, m.quantidade, m.und_medida, m.valor_custo,
+             m.fornecedor, f.nome as fornecedor_nome
+      FROM materiais m
+      LEFT JOIN fornecedores f ON CAST(m.fornecedor AS integer) = f.id
+      WHERE m.quantidade <= m.quantidade_segura
+      ORDER BY m.quantidade ASC
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});

@@ -326,10 +326,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     method: 'DELETE'
                 });
                 if (resp.ok) {
-                    alert('Material excluído!');
-                    window.location.href = 'menu.html'; // Corrija aqui
+                    const notificacao = document.getElementById('notificacao');
+                    notificacao.textContent = "Material excluído com sucesso!";
+                    notificacao.className = "sucesso";
+                    notificacao.style.display = "block";
+                    setTimeout(() => {
+                        notificacao.style.display = "none";
+                        window.location.href = 'menu.html';
+                    }, 2000);
                 } else {
-                    alert('Erro ao excluir material!');
+                    const notificacao = document.getElementById('notificacao');
+                    notificacao.textContent = "Erro ao excluir material!";
+                    notificacao.className = "erro";
+                    notificacao.style.display = "block";
+                    setTimeout(() => {
+                        notificacao.style.display = "none";
+                    }, 3000);
                 }
             }
             modalExcluir.classList.remove('ativo');
@@ -412,10 +424,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(dados)
             });
             if (resp.ok) {
-                alert('Material atualizado!');
-                window.location.reload();
+                const notificacao = document.getElementById('notificacao');
+                notificacao.textContent = "Material atualizado com sucesso!";
+                notificacao.className = "sucesso";
+                notificacao.style.display = "block";
+                setTimeout(() => {
+                    notificacao.style.display = "none";
+                    window.location.reload();
+                }, 2000);
             } else {
-                alert('Erro ao atualizar material!');
+                const notificacao = document.getElementById('notificacao');
+                notificacao.textContent = "Erro ao atualizar material!";
+                notificacao.className = "erro";
+                notificacao.style.display = "block";
+                setTimeout(() => {
+                    notificacao.style.display = "none";
+                }, 3000);
             }
         };
     }
@@ -454,6 +478,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const formFornecedor = document.getElementById('form-fornecedor');
+    const notificacao = document.getElementById('notificacao');
     if (formFornecedor) {
         formFornecedor.onsubmit = async function(e) {
             e.preventDefault();
@@ -476,10 +501,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(dados)
             });
             if (resp.ok) {
-                alert('Fornecedor cadastrado com sucesso!');
-                window.location.href = 'menu.html';
+                notificacao.textContent = "Fornecedor cadastrado com sucesso!";
+                notificacao.className = "sucesso";
+                notificacao.style.display = "block";
+                setTimeout(() => {
+                    notificacao.style.display = "none";
+                    window.location.href = 'menu.html';
+                }, 2000);
             } else {
-                alert('Erro ao cadastrar fornecedor!');
+                notificacao.textContent = "Erro ao cadastrar fornecedor!";
+                notificacao.className = "erro";
+                notificacao.style.display = "block";
+                setTimeout(() => {
+                    notificacao.style.display = "none";
+                }, 3000);
             }
         };
     }
@@ -614,12 +649,23 @@ document.addEventListener('DOMContentLoaded', function() {
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(dados)
                         });
-                        if (resp.ok) {
-                            alert('Fornecedor atualizado!');
+                    const notificacao = document.getElementById('notificacao');
+                    if (resp.ok) {
+                        notificacao.textContent = "Fornecedor atualizado com sucesso!";
+                        notificacao.className = "sucesso";
+                        notificacao.style.display = "block";
+                        setTimeout(() => {
+                            notificacao.style.display = "none";
                             window.location.reload();
-                        } else {
-                            alert('Erro ao atualizar fornecedor!');
-                        }
+                        }, 2000);
+                    } else {
+                        notificacao.textContent = "Erro ao atualizar fornecedor!";
+                        notificacao.className = "erro";
+                        notificacao.style.display = "block";
+                        setTimeout(() => {
+                            notificacao.style.display = "none";
+                        }, 3000);
+                    }
                     };
 
                     // Cancelar edição
@@ -656,11 +702,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 const resp = await fetch(`http://localhost:3000/fornecedores/${idFornecedor}`, {
                     method: 'DELETE'
                 });
+                const notificacao = document.getElementById('notificacao');
                 if (resp.ok) {
-                    alert('Fornecedor excluído!');
-                    window.location.href = 'consulta-fornecedor.html';
+                    notificacao.textContent = "Fornecedor excluído com sucesso!";
+                    notificacao.className = "sucesso";
+                    notificacao.style.display = "block";
+                    setTimeout(() => {
+                        notificacao.style.display = "none";
+                        window.location.href = 'consulta-fornecedor.html';
+                    }, 2000);
                 } else {
-                    alert('Erro ao excluir fornecedor!');
+                    notificacao.textContent = "Erro ao excluir fornecedor!";
+                    notificacao.className = "erro";
+                    notificacao.style.display = "block";
+                    setTimeout(() => {
+                        notificacao.style.display = "none";
+                    }, 3000);
                 }
             };
         }
@@ -814,3 +871,113 @@ document.addEventListener('DOMContentLoaded', function() {
     carregarMateriais();
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.endsWith('historico-movimentacoes.html')) {
+        const form = document.getElementById('form-historico');
+        const tabela = document.getElementById('tabela-historico');
+        const tbody = tabela.querySelector('tbody');
+        const mensagem = document.getElementById('mensagem-hist');
+
+        form.onsubmit = async function(e) {
+            e.preventDefault();
+            let codigo = document.getElementById('codigo-interno-hist').value.trim();
+            // Removes pontos do código interno
+            codigo = codigo.replace(/\./g, '');
+            if (!codigo) return;
+            mensagem.textContent = '';
+            tabela.style.display = 'none';
+            tbody.innerHTML = '';
+            const resp = await fetch(`http://localhost:3000/historico/${codigo}`);
+            if (!resp.ok) {
+                mensagem.textContent = 'Erro ao buscar histórico!';
+                return;
+            }
+            const historico = await resp.json();
+            if (!historico.length) {
+                mensagem.textContent = 'Nenhuma movimentação encontrada!';
+                return;
+            }
+            historico.forEach(mov => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${mov.tipo}</td>
+                        <td>${new Date(mov.data).toLocaleString('pt-BR')}</td>
+                        <td>R$ ${Number(mov.valor_custo).toFixed(2)}</td>
+                        <td>R$ ${Number(mov.valor_venda).toFixed(2)}</td>
+                        <td>${mov.fornecedor ? mov.fornecedor + ' - ' + (mov.fornecedor_nome || '') : ''}</td>
+                        <td>${mov.quantidade}</td>
+                        <td>${mov.und_medida}</td>
+                    </tr>
+                `;
+            });
+            tabela.style.display = '';
+        };
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const formCadastroMaterial = document.getElementById('form-cadastro-material');
+    const notificacao = document.getElementById('notificacao');
+    if (formCadastroMaterial) {
+        formCadastroMaterial.onsubmit = async function(e) {
+            e.preventDefault();
+            const dados = {
+                descricao_breve: document.getElementById('descricao-breve').value,
+                fabricante: document.getElementById('fabricante').value,
+                valor_custo: Number(document.getElementById('valor-custo').value.replace(/\D/g, "")) / 100,
+                valor: Number(document.getElementById('valor').value.replace(/\D/g, "")) / 100,
+                codigo_fabricante: document.getElementById('codigo-fabricante').value,
+                descricao_completa: document.getElementById('descricao-completa').value,
+                quantidade: Number(document.getElementById('quantidade').value) || 0,
+                und_medida: document.getElementById('und-medida').value,
+                fornecedor: document.getElementById('fornecedor').value,
+                quantidade_segura: Number(document.getElementById('quantidade-segura').value) || 0
+            };
+            const resp = await fetch('http://localhost:3000/materiais', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            if (resp.ok) {
+                notificacao.textContent = "Material cadastrado com sucesso!";
+                notificacao.className = "sucesso";
+                notificacao.style.display = "block";
+                setTimeout(() => {
+                    notificacao.style.display = "none";
+                    window.location.href = 'menu.html';
+                }, 2000);
+            } else {
+                notificacao.textContent = "Erro ao cadastrar material!";
+                notificacao.className = "erro";
+                notificacao.style.display = "block";
+                setTimeout(() => {
+                    notificacao.style.display = "none";
+                }, 3000);
+            }
+        };
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.location.pathname.endsWith('estoque-baixo.html')) {
+        const tbody = document.getElementById('tbody-estoque-baixo');
+        fetch('http://localhost:3000/materiais/estoque-baixo')
+            .then(resp => resp.json())
+            .then(materiais => {
+                tbody.innerHTML = '';
+                materiais.forEach(mat => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${mat.id}</td>
+                            <td>${mat.descricao_breve}</td>
+                            <td>${mat.fabricante}</td>
+                            <td>${mat.fornecedor ? mat.fornecedor + ' - ' + (mat.fornecedor_nome || '') : ''}</td>
+                            <td>${mat.quantidade}</td>
+                            <td>${mat.und_medida}</td>
+                            <td>R$ ${Number(mat.valor_custo).toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            });
+    }
+});
