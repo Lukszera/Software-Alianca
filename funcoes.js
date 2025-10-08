@@ -1,31 +1,3 @@
-// Objeto com os dados dos itens
-const dados = {
-    "001": {
-        descricaoBreve: "Peça A",
-        descricaoCompleta: "Descrição completa da Peça A",
-        fabricante: "Fabricante X",
-        codigoFabricante: "12345",
-        valor: "R$ 50,00",
-        quantidade: "10"
-    },
-    "002": {
-        descricaoBreve: "Peça B",
-        descricaoCompleta: "Descrição completa da Peça B",
-        fabricante: "Fabricante Y",
-        codigoFabricante: "67890",
-        valor: "R$ 75,00",
-        quantidade: "5"
-    },
-    "003": {
-        descricaoBreve: "Peça C",
-        descricaoCompleta: "Descrição completa da Peça C",
-        fabricante: "Fabricante Z",
-        codigoFabricante: "11223",
-        valor: "R$ 100,00",
-        quantidade: "8"
-    }
-};
-
 // Função para carregar os dados do item com base no código
 function carregarDados(codigo) {
     const item = dados[codigo];
@@ -200,3 +172,137 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 });
+
+// Função para obter parâmetro da URL
+function getParametroUrl(nome) {
+    const url = new URL(window.location.href);
+    return url.searchParams.get(nome);
+}
+
+// Carregar detalhes do material na página de detalhes
+document.addEventListener('DOMContentLoaded', async function() {
+    if (window.location.pathname.endsWith('detalhes-material.html')) {
+        const id = getParametroUrl('id');
+        if (id) {
+            const resp = await fetch(`http://localhost:3000/materiais/${id}`);
+            if (resp.ok) {
+                const mat = await resp.json();
+                // Preenche os campos do formulário
+                document.getElementById('descricao-breve').value = mat.descricao_breve || '';
+                document.getElementById('descricao-completa').value = mat.descricao_completa || '';
+                document.getElementById('fabricante').value = mat.fabricante || '';
+                document.getElementById('codigo-fabricante').value = mat.codigo_fabricante || '';
+                document.getElementById('fornecedor').value = mat.fornecedor || '';
+                document.getElementById('valor').value = mat.valor || '';
+                document.getElementById('und-medida').value = mat.und_medida || '';
+                document.getElementById('quantidade-segura').value = mat.quantidade_segura || '';
+                document.getElementById('quantidade').value = mat.quantidade || '';
+                // Exibe o código interno formatado em algum lugar
+                document.querySelector('.codigo-interno').textContent = 'CÓDIGO INTERNO - ' + formatarCodigoInterno(mat.id);
+            } else {
+                document.getElementById('detalhes-material').innerText = 'Material não encontrado!';
+            }
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const formCadastro = document.querySelector('.formulario-cadastro form');
+    if (formCadastro) {
+        formCadastro.onsubmit = async function(e) {
+            e.preventDefault();
+            const dados = {
+                descricao_breve: document.getElementById('descricao-breve').value,
+                fabricante: document.getElementById('fabricante').value,
+                valor: Number(document.getElementById('valor').value) || 0,
+                codigo_fabricante: document.getElementById('codigo-fabricante').value,
+                descricao_completa: document.getElementById('descricao-completa').value,
+                quantidade: 0,
+                und_medida: document.getElementById('und-medida').value,
+                fornecedor: document.getElementById('fornecedor').value,
+                quantidade_segura: Number(document.getElementById('quantidade-segura').value) || 0
+            };
+            const resp = await fetch('http://localhost:3000/materiais', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            if (resp.ok) {
+                alert('Material cadastrado com sucesso!');
+                window.location.href = 'menu.html';
+            } else {
+                alert('Erro ao cadastrar material!');
+            }
+        };
+    }
+});
+
+function formatarCodigoInterno(codigo) {
+    let str = codigo.toString().padStart(8, '0');
+    return str.replace(/(\d{2})(\d{3})(\d{3})/, '$1.$2.$3');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tbody = document.getElementById('tbody-materiais');
+    if (tbody) {
+        async function carregarMateriais() {
+            const resp = await fetch('http://localhost:3000/materiais');
+            const materiais = await resp.json();
+            tbody.innerHTML = '';
+            materiais.forEach(mat => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${mat.id ? formatarCodigoInterno(mat.id) : ''}</td>
+                        <td>${mat.descricao_breve}</td>
+                        <td>${mat.fabricante}</td>
+                        <td>${mat.codigo_fabricante}</td>
+                        <td>R$ ${Number(mat.valor).toFixed(2)}</td>
+                        <td>${mat.quantidade}</td>
+                        <td>${mat.und_medida}</td>
+                        <td>${mat.fornecedor}</td>
+                        <td>
+                            <button onclick="window.location.href='detalhes-material.html?id=${mat.id}'">
+                                <img src="imagens/Olho.png" class="icone-olho" alt="Olho">
+                                VISUALIZAR
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        carregarMateriais();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const formCadastro = document.querySelector('.formulario-cadastro form');
+    if (formCadastro) {
+        formCadastro.onsubmit = async function(e) {
+            e.preventDefault();
+            const dados = {
+                descricao_breve: document.getElementById('descricao-breve').value,
+                fabricante: document.getElementById('fabricante').value,
+                valor: Number(document.getElementById('valor').value) || 0,
+                codigo_fabricante: document.getElementById('codigo-fabricante').value,
+                descricao_completa: document.getElementById('descricao-completa').value,
+                quantidade: 0,
+                und_medida: document.getElementById('und-medida').value,
+                fornecedor: document.getElementById('fornecedor').value,
+                quantidade_segura: Number(document.getElementById('quantidade-segura').value) || 0
+            };
+            const resp = await fetch('http://localhost:3000/materiais', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            if (resp.ok) {
+                alert('Material cadastrado com sucesso!');
+                window.location.href = 'menu.html';
+            } else {
+                alert('Erro ao cadastrar material!');
+            }
+        };
+    }
+});
+
+

@@ -18,15 +18,15 @@ header {
 }
 
 .formulario-cadastro {
-  width: 700px; /* Aumenta a largura do formulário */
-  margin: 50px auto;
+  width: 720px; /* Aumenta a largura do formulário */
+  margin: 70px auto;
   padding: 30px; /* Aumenta o padding para mais espaçamento interno */
   border: 4px solid #00A54F;
   background-color: #E6E6E6;
   border-radius: 10px;
   box-sizing: border-box;
   position: absolute;
-  top: 150px; /* Ajusta a posição vertical */
+  top: 100px; /* Ajusta a posição vertical */
   left: 50%;
   transform: translateX(-50%);
   font-family: 'Roboto', sans-serif; /* Garante que a fonte seja consistente */
@@ -44,7 +44,7 @@ header {
 
 .formulario-cadastro label {
   display: block;
-  margin-bottom: 10px; /* Aumenta o espaçamento entre o label e o campo */
+  margin-bottom: 6px; /* Aumenta o espaçamento entre o label e o campo */
   font-weight: bold;
   color: #000000;
 }
@@ -87,7 +87,7 @@ header {
   display: flex;
   justify-content: center; /* Centraliza os botões horizontalmente */
   gap: 20px; /* Adiciona espaço entre os botões */
-  margin-top: 30px; /* Aumenta o espaçamento acima dos botões */
+  margin-top: 5px; /* Aumenta o espaçamento acima dos botões */
 }
 
 .botao-salvar {
@@ -126,3 +126,35 @@ header {
   background-color: #caae3d;
 }
 
+/* ...código anterior... */
+
+.formulario-cadastro select {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 2px solid #DBC056;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 18px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff;
+  color: #000;
+  appearance: none; /* Remove o estilo padrão do select */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+/* Estiliza o select quando está em foco */
+.formulario-cadastro select:focus {
+  border: 2px solid #00A54F !important;
+  outline: none;
+}
+
+/* Opcional: seta customizada para o select */
+.formulario-cadastro select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 16,0 8,8'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 18px 18px;
+  padding-right: 40px;
+}

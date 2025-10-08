@@ -21,19 +21,42 @@
             <input type="text" id="fabricante" name="fabricante">
 
             <label for="valor">VALOR:</label>
-            <input type="text" id="valor" name="valor">
+            <div style="position: relative;">
+                <span style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #000000;">R$</span>
+                <input type="number" id="valor" name="valor" style="padding-left: 35px;" min="0" step="0.01" required>
+            </div>
 
             <label for="codigo-fabricante">CÓDIGO FABRICANTE:</label>
             <input type="text" id="codigo-fabricante" name="codigo-fabricante">
+
+            <label for="und-medida">UND. MEDIDA:</label>
+            <select id="und-medida" name="und-medida" required>
+                <option value="M">M</option>
+                <option value="UN">UN</option>
+                <option value="KG">KG</option>
+                <option value="L">L</option>
+                <option value="m2">M2</option>
+                <option value="m3">M3</option>
+            </select>
+
+            <label for="quantidade-segura">QUANTIDADE SEGURA:</label>
+            <input type="number" id="quantidade-segura" name="quantidade-segura" min="0" required>
+
+            <label for="fornecedor">FORNECEDOR:</label>
+            <input type="text" id="fornecedor" name="fornecedor" required>
 
             <label for="descricao-completa">DESCRIÇÃO COMPLETA:</label>
             <textarea id="descricao-completa" name="descricao-completa"></textarea>
 
             <div class="botoes">
-            <button type="submit" class="botao-salvar" onclick="alert('Material cadastrado com sucesso. Código Interno:')">SALVAR ✔</button>
+            <button type="submit" class="botao-salvar">SALVAR ✔</button>
             <button type="button" class="botao-cancelar" onclick="window.history.back()">CANCELAR ✖</button>
             </div>
         </form>
     </div>
+
+<script src="funcoes.js"></script>
+
 </body>
+
 </html>

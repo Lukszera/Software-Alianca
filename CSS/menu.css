@@ -21,7 +21,7 @@ header {
   box-sizing: border-box;
   position: absolute; 
   top: 290px; 
-  left: 260px; 
+  left: 110px; 
 }
 
 .pesquisa {
@@ -67,8 +67,10 @@ header {
   margin-top: 20px;
   position: absolute;
   top: 270px;
-  left: 750px; /* Ajuste a posição horizontal conforme necessário */
+  left: 530px; /* Ajuste a posição horizontal conforme necessário */
   max-height: 830px; /* Define uma altura máxima para a rolagem */
+
+
 }
 
 /* Estilização da barra de rolagem */
@@ -90,7 +92,7 @@ header {
 }
 
 .tabela-estoque {
-  width: auto; /* Permite que a tabela aumente de largura sem limite */
+  width: 100%; /* Permite que a tabela aumente de largura sem limite */
   border-collapse: collapse; /* Remove espaços entre bordas */
   text-align: center; /* Centraliza o texto */
   font-size: 16px;
@@ -101,19 +103,23 @@ header {
   border: 3px solid #00A54F; /* Aumenta a espessura das bordas das células */
   padding: 45px; /* Aumenta ainda mais o espaçamento interno para ampliar visualmente a largura */
   text-align: center; /* Centraliza o texto nas células */
+  background-clip: padding-box; /* Garante que o fundo cubra até a borda */
 }
 
 .tabela-estoque th {
-  background-color: #00A54F; /* Cor do cabeçalho */
-  color: white; /* Cor do texto no cabeçalho */
+  background-color: #00A54F;
+  color: white;
   text-transform: uppercase;
-  position: sticky; /* Torna o cabeçalho fixo */
-  top: 0; /* Fixa o cabeçalho no topo da tabela */
-  z-index: 1; /* Garante que o cabeçalho fique acima das células */
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border: 3px solid #00A54F;
+  border-bottom: none;
 }
 
 .tabela-estoque td {
-  background-color: #E6E6E6; /* Cor de fundo das células */
+  border-collapse: collapse;
+  border: 3px solid #00A54F;
 }
 
 .tabela-estoque tr:nth-child(even) td {
