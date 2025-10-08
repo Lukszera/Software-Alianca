@@ -1,0 +1,17 @@
+#notificacao-estoque-baixo {
+  display: none;
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 9999;
+  min-width: 320px;
+  background: #ffeeba;
+  color: #856404;
+  border: 2px solid #DBC056;
+  border-radius: 8px;
+  padding: 18px 24px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transition: opacity 0.3s;
+}
