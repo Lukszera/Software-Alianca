@@ -904,19 +904,26 @@ document.addEventListener('DOMContentLoaded', function() {
         const form = document.getElementById('form-historico');
         const tabela = document.getElementById('tabela-historico');
         const wrapper = document.querySelector('.tabela-historico-wrapper');
-        wrapper.style.display = 'none'; // ou ''
+        wrapper.style.display = 'none';
         const tbody = tabela.querySelector('tbody');
         const mensagem = document.getElementById('mensagem-hist');
+        const totaisDiv = document.querySelector('.totais-historico');
+        const totalCustoSpan = document.getElementById('total-custo');
+        const totalVendaSpan = document.getElementById('total-venda');
 
         form.onsubmit = async function(e) {
             e.preventDefault();
             let codigo = document.getElementById('codigo-interno-hist').value.trim();
-            // Removes pontos do código interno
             codigo = codigo.replace(/\./g, '');
             if (!codigo) return;
             mensagem.textContent = '';
             tabela.style.display = 'none';
+            wrapper.style.display = 'none';
             tbody.innerHTML = '';
+            if (totaisDiv) totaisDiv.style.display = 'none';
+            if (totalCustoSpan) totalCustoSpan.textContent = '';
+            if (totalVendaSpan) totalVendaSpan.textContent = '';
+
             const resp = await fetch(`http://localhost:3000/historico/${codigo}`);
             if (!resp.ok) {
                 mensagem.textContent = 'Erro ao buscar histórico!';
@@ -927,6 +934,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 mensagem.textContent = 'Nenhuma movimentação encontrada!';
                 return;
             }
+            let totalCusto = 0;
+            let totalVenda = 0;
             historico.forEach(mov => {
                 tbody.innerHTML += `
                     <tr>
@@ -939,9 +948,17 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${mov.und_medida}</td>
                     </tr>
                 `;
+                // Soma os totais
+                totalCusto += Number(mov.valor_custo) * Number(mov.quantidade);
+                totalVenda += Number(mov.valor_venda) * Number(mov.quantidade);
             });
             tabela.style.display = '';
-            wrapper.style.display = ''; // para mostrar
+            wrapper.style.display = '';
+            if (totaisDiv) {
+                totaisDiv.style.display = 'block';
+                totalCustoSpan.textContent = `Valor total de custo: R$ ${totalCusto.toFixed(2)}`;
+                totalVendaSpan.textContent = `Valor total de venda: R$ ${totalVenda.toFixed(2)}`;
+            }
         };
     }
 });
