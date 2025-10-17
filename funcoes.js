@@ -1,3 +1,14 @@
+// Tenta obter ipcRenderer (quando rodando no Electron com nodeIntegration)
+let ipcRenderer = null;
+try {
+    // Em páginas estáticas no Electron, require pode existir
+    const electron = require('electron');
+    ipcRenderer = electron && electron.ipcRenderer ? electron.ipcRenderer : null;
+} catch (_) {
+    // Não está em Electron ou require desabilitado
+    ipcRenderer = null;
+}
+
 // Função para carregar os dados do item com base no código
 function carregarDados(codigo) {
     const item = dados[codigo];
@@ -243,62 +254,130 @@ function formatarCodigoInterno(codigo) {
     return str.replace(/(\d{2})(\d{3})(\d{3})/, '$1.$2.$3');
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const inputBusca = document.querySelector('.input-busca');
-    const btnLupa = document.querySelector('.icone-lupa');
-    const tbody = document.getElementById('tbody-materiais');
-    let materiaisCache = [];
-
-    async function carregarMateriais() {
-        const resp = await fetch('http://localhost:3000/materiais');
-        const materiais = await resp.json();
-        materiaisCache = materiais; // Salva para filtrar depois
-        renderizarTabela(materiais);
-    }
-
-function renderizarTabela(materiais) {
-    tbody.innerHTML = '';
-    materiais.forEach(mat => {
-        tbody.innerHTML += `
-            <tr>
-                <td>${mat.id ? formatarCodigoInterno(mat.id) : ''}</td>
-                <td>${mat.descricao_breve}</td>
-                <td>${mat.fabricante}</td>
-                <td>${mat.codigo_fabricante}</td>
-                <td>R$ ${Number(mat.valor).toFixed(2)}</td>
-                <td>${mat.quantidade}</td>
-                <td>${mat.und_medida}</td>
-                <td>${mat.fornecedor}</td>
-                <td>
-                    <button onclick="window.location.href='detalhes-material.html?id=${mat.id}'">
-                        <img src="../imagens/Olho.png" class="icone-olho" alt="Olho">
-                        VISUALIZAR
-                    </button>
-                </td>
-            </tr>
-        `;
-    });
+// Helper: fetch JSON com timeout curto para fallback rápido (HTTP -> IPC)
+async function fetchJson(url, timeoutMs = 500) {
+  const ctrl = new AbortController();
+  const id = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const resp = await fetch(url, { signal: ctrl.signal });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    return await resp.json();
+  } finally {
+    clearTimeout(id);
+  }
 }
 
-    // Filtro ao digitar ou clicar na lupa
-    function filtrarMateriais() {
-        const termo = inputBusca.value.trim().toLowerCase();
-        const filtrados = materiaisCache.filter(mat =>
-            (mat.id && formatarCodigoInterno(mat.id).toLowerCase().includes(termo)) ||
-            (mat.descricao_breve && mat.descricao_breve.toLowerCase().includes(termo)) ||
-            (mat.fabricante && mat.fabricante.toLowerCase().includes(termo)) ||
-            (mat.codigo_fabricante && mat.codigo_fabricante.toLowerCase().includes(termo)) ||
-            (mat.fornecedor && mat.fornecedor.toLowerCase().includes(termo))
-        );
-        renderizarTabela(filtrados);
+document.addEventListener('DOMContentLoaded', function() {
+  const tbody = document.getElementById('tbody-materiais');
+  const inputBusca = document.querySelector('.input-busca');
+  const btnLupa = document.querySelector('.icone-lupa');
+  if (!tbody) return;
+
+  let materiaisCache = [];
+  let mapaFornecedores = {};
+
+  // Feedback imediato
+  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:#888">Carregando...</td></tr>';
+
+  function renderizarTabela(materiais) {
+    const rows = materiais.map(mat => {
+      const fornecedorTexto = mat.fornecedor
+        ? (mapaFornecedores[mat.fornecedor]
+            ? `${mat.fornecedor} - ${mapaFornecedores[mat.fornecedor]}`
+            : mat.fornecedor)
+        : '';
+      return `
+        <tr>
+          <td>${mat.id ? formatarCodigoInterno(mat.id) : ''}</td>
+          <td>${mat.descricao_breve || ''}</td>
+          <td>${mat.fabricante || ''}</td>
+          <td>${mat.codigo_fabricante || ''}</td>
+          <td>R$ ${Number(mat.valor || 0).toFixed(2)}</td>
+          <td>${mat.quantidade ?? ''}</td>
+          <td>${mat.und_medida || ''}</td>
+          <td>${fornecedorTexto}</td>
+          <td>
+            <button onclick="window.location.href='detalhes-material.html?id=${mat.id}'">
+              <img src="../imagens/Olho.png" class="icone-olho" alt="Olho">
+              VISUALIZAR
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+    tbody.innerHTML = rows || '<tr><td colspan="9" style="text-align:center;color:#888">Nenhum material encontrado.</td></tr>';
+  }
+
+  function filtrarMateriais() {
+    const termo = (inputBusca?.value || '').trim().toLowerCase();
+    if (!termo) return renderizarTabela(materiaisCache);
+    const filtrados = materiaisCache.filter(mat =>
+      (mat.id && formatarCodigoInterno(mat.id).toLowerCase().includes(termo)) ||
+      (mat.descricao_breve && mat.descricao_breve.toLowerCase().includes(termo)) ||
+      (mat.fabricante && mat.fabricante.toLowerCase().includes(termo)) ||
+      (mat.codigo_fabricante && mat.codigo_fabricante.toLowerCase().includes(termo)) ||
+      (mat.fornecedor && String(mat.fornecedor).toLowerCase().includes(termo))
+    );
+    renderizarTabela(filtrados);
+  }
+
+  function debounce(fn, ms) {
+    let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+  }
+
+  if (inputBusca) inputBusca.addEventListener('input', debounce(filtrarMateriais, 150));
+  if (btnLupa) btnLupa.addEventListener('click', filtrarMateriais);
+
+  async function carregar() {
+    // HTTP e IPC em paralelo; usa o que responder primeiro
+    const tentativas = [];
+
+    tentativas.push(
+      (async () => {
+        const [mats, forns] = await Promise.all([
+          fetchJson('http://localhost:3000/materiais', 500),
+          fetchJson('http://localhost:3000/fornecedores', 500)
+        ]);
+        return { mats, forns };
+      })()
+    );
+
+    if (ipcRenderer) {
+      tentativas.push(
+        (async () => {
+          const [matsRes, fornsRes] = await Promise.allSettled([
+            ipcRenderer.invoke('listar-materiais'),
+            ipcRenderer.invoke('listar-fornecedores')
+          ]);
+          return {
+            mats: matsRes.status === 'fulfilled' ? matsRes.value : [],
+            forns: fornsRes.status === 'fulfilled' ? fornsRes.value : []
+          };
+        })()
+      );
     }
 
-    inputBusca.addEventListener('input', filtrarMateriais);
-    if (btnLupa) btnLupa.addEventListener('click', filtrarMateriais);
+    let resultado = null;
+    try {
+      resultado = await Promise.race(tentativas);
+    } catch (_) {}
 
-    carregarMateriais();
+    // Fallbacks se necessário
+    let materiais = resultado?.mats || [];
+    let fornecedores = resultado?.forns || [];
+
+    if ((!materiais.length || !fornecedores.length) && ipcRenderer) {
+      try { if (!materiais.length) materiais = await ipcRenderer.invoke('listar-materiais'); } catch {}
+      try { if (!fornecedores.length) fornecedores = await ipcRenderer.invoke('listar-fornecedores'); } catch {}
+    }
+
+    materiaisCache = materiais;
+    mapaFornecedores = Object.fromEntries((fornecedores || []).map(f => [f.id, f.nome]));
+    renderizarTabela(materiaisCache);
+  }
+
+  carregar();
 });
-
 document.addEventListener('DOMContentLoaded', function() {
     const btnExcluirIcone = document.querySelector('.icone-formulario[alt="Excluir"]');
     const modalExcluir = document.getElementById('modal-excluir');
@@ -847,14 +926,32 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     const tbody = document.getElementById('tbody-materiais');
 
+    // Se não houver tabela nesta página, não executa o restante
+    if (!tbody) return;
+
     async function carregarMateriais() {
-        // Busca materiais e fornecedores em paralelo
-        const [respMateriais, respFornecedores] = await Promise.all([
-            fetch('http://localhost:3000/materiais'),
-            fetch('http://localhost:3000/fornecedores')
-        ]);
-        const materiais = await respMateriais.json();
-        const fornecedores = await respFornecedores.json();
+        let materiais = [];
+        let fornecedores = [];
+        try {
+            // Busca materiais e fornecedores em paralelo
+            const [respMateriais, respFornecedores] = await Promise.all([
+                fetch('http://localhost:3000/materiais'),
+                fetch('http://localhost:3000/fornecedores')
+            ]);
+            if (!respMateriais.ok || !respFornecedores.ok) throw new Error('HTTP');
+            materiais = await respMateriais.json();
+            fornecedores = await respFornecedores.json();
+        } catch (err) {
+            // Fallback: usa IPC do Electron se disponível
+            if (ipcRenderer) {
+                try {
+                    materiais = await ipcRenderer.invoke('listar-materiais');
+                } catch (_) { materiais = []; }
+                try {
+                    fornecedores = await ipcRenderer.invoke('listar-fornecedores');
+                } catch (_) { fornecedores = []; }
+            }
+        }
 
         // Cria um mapa de id => nome
         const mapaFornecedores = {};

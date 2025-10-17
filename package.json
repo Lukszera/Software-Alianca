@@ -1,11 +1,13 @@
 {
   "name": "software-alianca",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000S\u0000o\u0000f\u0000t\u0000w\u0000a\u0000r\u0000e\u0000-\u0000A\u0000l\u0000i\u0000a\u0000n\u0000c\u0000a\u0000\r\u0000 \u0000",
-  "main": "funcoes.js",
+  "description": "Aplicação de estoque com Electron",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
@@ -22,5 +24,29 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "electron": "^38.3.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.software.alianca",
+    "productName": "Software Aliança",
+    "files": [
+      "**/*",
+      "!backend/**",
+      "!**/*.map"
+    ],
+    "win": {
+      "target": ["nsis"],
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Software Aliança"
+    }
   }
 }

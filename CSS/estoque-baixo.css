@@ -1,7 +1,9 @@
 body {
     background-color: #E6E6E6;
     font-family: 'Roboto', sans-serif;
+    overflow: hidden;
 }
+
 header {
     background-color: #00A54F;
     text-align: center;

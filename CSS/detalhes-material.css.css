@@ -1,6 +1,7 @@
 body {
   background-color: #E6E6E6;
-  font-family: 'Roboto', sans-serif; /* Altere para a fonte desejada */
+  font-family: 'Roboto', sans-serif; 
+  overflow: hidden;
 }
 
 header {
