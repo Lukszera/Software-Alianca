@@ -1,6 +1,7 @@
 body {
   background-color: #E6E6E6;
   font-family: 'Roboto', sans-serif; /* Altere para a fonte desejada */
+  overflow: hidden;
 }
 
 header {
@@ -19,7 +20,7 @@ header {
 
 .formulario-cadastro {
   width: 720px; /* Aumenta a largura do formulário */
-  margin: 60px auto;
+  margin: 70px auto;
   padding: 30px; /* Aumenta o padding para mais espaçamento interno */
   border: 4px solid #00A54F;
   background-color: #E6E6E6;
