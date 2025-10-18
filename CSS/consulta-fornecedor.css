@@ -43,20 +43,29 @@ h2 {
   filter: brightness(0.85);
 }
 
-.tabela-fornecedor {
+.tabela-fornecedor-wrapper {
     width: 55%;
     margin: 0 auto 40px auto;
-    border-collapse: collapse;
+    max-height: 1050px; /* ajuste a altura conforme necessário */
+    overflow-y: auto;
     background: #fff;
     border-radius: 10px;
-    overflow: hidden;
     box-shadow: 0 2px 16px rgba(0,0,0,0.10);
+}
+
+.tabela-fornecedor {
+    width: 100%;
+    border-collapse: collapse;
+    background: transparent;
+    border-radius: 0;
+    /* remover overflow do table — o wrapper controla a rolagem */
 }
 
 .tabela-fornecedor th, .tabela-fornecedor td {
     padding: 16px 20px;
     border-bottom: 1px solid #eee;
-    text-align: left;
+    text-align: center;           /* Centraliza horizontalmente */
+    vertical-align: middle;       /* Centraliza verticalmente */
     font-size: 1.1em;
 }
 
@@ -88,14 +97,6 @@ h2 {
     gap: 8px;                /* Espaço entre ícone e texto */
     transition: background 0.2s;
     margin-left: 45px;
-}
-
-.tabela-fornecedor th, .tabela-fornecedor td {
-    padding: 16px 20px;
-    border-bottom: 1px solid #eee;
-    text-align: center;           /* Centraliza horizontalmente */
-    vertical-align: middle;       /* Centraliza verticalmente */
-    font-size: 1.1em;
 }
 
 .tabela-fornecedor button:hover {
@@ -134,4 +135,46 @@ h2 {
     width: 35px;
     height: 35px;
     transition: filter 0.2s;
+}
+
+.tabela-fornecedor-wrapper::-webkit-scrollbar { width: 10px; }
+.tabela-fornecedor-wrapper::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 6px; }
+
+/* Cabeçalho fixo dentro do wrapper rolável */
+.tabela-fornecedor thead th {
+    position: sticky;
+    top: 0;                   /* distância do topo do wrapper */
+    z-index: 5;               /* fica acima das linhas */
+    background: #00A54F;      /* manter mesma cor de fundo do cabeçalho */
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08); /* separação visual */
+}
+
+/* Garante que o thead funcione como grupo de cabeçalho */
+.tabela-fornecedor thead {
+    display: table-header-group;
+}
+
+/* Ajuste opcional: se quiser que as células do thead tenham altura fixa */
+.tabela-fornecedor thead th {
+    padding: 12px 20px;
+}
+
+/* Estilo de scrollbar igual ao menu.css para o wrapper da tabela */
+.tabela-fornecedor-wrapper::-webkit-scrollbar,
+.tabela-fornecedor-wrapper .tabela-fornecedor::-webkit-scrollbar {
+  width: 9px;
+}
+.tabela-fornecedor-wrapper::-webkit-scrollbar-track,
+.tabela-fornecedor-wrapper .tabela-fornecedor::-webkit-scrollbar-track {
+  background: #E6E6E6;
+}
+.tabela-fornecedor-wrapper::-webkit-scrollbar-thumb,
+.tabela-fornecedor-wrapper .tabela-fornecedor::-webkit-scrollbar-thumb {
+  background: #00A54F;
+  border-radius: 4px;
+}
+.tabela-fornecedor-wrapper::-webkit-scrollbar-thumb:hover,
+.tabela-fornecedor-wrapper .tabela-fornecedor::-webkit-scrollbar-thumb:hover {
+  background: #078343;
 }

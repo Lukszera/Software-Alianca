@@ -224,7 +224,7 @@ ipcMain.handle('movimentar-material', async (event, { tipo, codigo_interno, quan
 
 // Retorna histórico de movimentações por material_id (usa tabela historico_movimentacoes)
 ipcMain.handle('historico-movimentacoes', async (event, materialId) => {
-  console.log('[main] historico-movimentacoes invoked, materialId=', materialId);
+  // console.log('[main] historico-movimentacoes invoked, materialId=', materialId); // remover ou comentar
   try {
     if (!materialId) return [];
     const q = `

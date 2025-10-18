@@ -52,10 +52,11 @@
             <input type="number" id="quantidade-segura" name="quantidade-segura" min="0" required>
 
             <label for="fornecedor">FORNECEDOR:</label>
-            <select id="fornecedor" name="fornecedor" required>
-                <option value="">Selecione o fornecedor</option>
-                <!-- Opções preenchidas pelo JS -->
-            </select>
+            <div class="select-wrapper">
+                <select id="fornecedor" name="fornecedor" required>
+                    <option value="">Selecione o fornecedor</option>
+                </select>
+            </div>
 
             <label for="quantidade">QUANTIDADE:</label>
             <input type="number" id="quantidade" name="quantidade" min="0" required>
