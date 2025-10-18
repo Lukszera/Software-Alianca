@@ -362,3 +362,87 @@ select:disabled {
   color: #b30000;
   border: 2px solid #e57373;
 }
+
+.formulario-detalhes #fornecedor,
+.formulario-detalhes input.fornecedor-input,
+.formulario-detalhes select#fornecedor {
+  width: 100%;
+  padding: 9px 40px 9px 9px; /* espaço à direita para seta/scrollbar */
+  margin-bottom: 14px;
+  border: 2px solid #DBC056;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: 'Roboto', sans-serif;
+  background-color: #fff;
+  color: #000;
+  line-height: 1.4;
+  min-height: 42px; /* garante espaço ao transformar em listbox */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 18px 18px;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg width='16' height='16' fill='gray' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 16,0 8,8'/></svg>");
+}
+
+/* foco igual ao formulário de cadastro */
+.formulario-detalhes #fornecedor:focus,
+.formulario-detalhes input.fornecedor-input:focus,
+.formulario-detalhes select#fornecedor:focus {
+  border: 2px solid #00A54F !important;
+  outline: none;
+}
+
+/* quando o select vira listbox (size), posiciona como dropdown sobrepondo */
+.select-wrapper { position: relative; min-height: 42px; }
+.select-wrapper select[size] {
+  position: absolute;
+  left: 0;
+  top: 0; /* ou calc(100% + 6px) para aparecer abaixo */
+  width: 100%;
+  max-height: calc(1.8em * 6);
+  z-index: 9999;
+  box-sizing: border-box;
+  overflow-y: auto !important;
+  padding-right: 26px; /* garante espaço para scrollbar */
+}
+
+/* scrollbar estilizada consistente */
+.select-wrapper select::-webkit-scrollbar,
+.formulario-detalhes select::-webkit-scrollbar {
+  width: 12px;
+}
+.select-wrapper select::-webkit-scrollbar-track,
+.formulario-detalhes select::-webkit-scrollbar-track {
+  background: #E6E6E6;
+}
+.select-wrapper select::-webkit-scrollbar-thumb,
+.formulario-detalhes select::-webkit-scrollbar-thumb {
+  background: #00A54F;
+  border-radius: 6px;
+}
+
+/* Permite que o dropdown sobreponha sem ser cortado */
+.formulario-detalhes {
+  overflow: visible !important;
+}
+
+/* garante wrapper como referência e camada base */
+.select-wrapper {
+  position: relative;
+  min-height: 42px;
+  z-index: 1; /* camada base */
+}
+
+/* dropdown expandido: sobrepõe, aparecendo abaixo do controle */
+.select-wrapper select[size] {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 6px); /* ajusta para aparecer abaixo sem empurrar */
+  width: 100%;
+  max-height: calc(1.8em * 6);
+  z-index: 99999 !important; /* força sobreposição */
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}

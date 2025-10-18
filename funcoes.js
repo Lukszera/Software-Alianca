@@ -9,212 +9,63 @@ try {
     ipcRenderer = null;
 }
 
-// Função para carregar os dados do item com base no código
-function carregarDados(codigo) {
-    const item = dados[codigo];
-    if (item) {
-        document.getElementById('descricao-breve').value = item.descricaoBreve;
-        document.getElementById('descricao-completa').value = item.descricaoCompleta;
-        document.getElementById('fabricante').value = item.fabricante;
-        document.getElementById('codigo-fabricante').value = item.codigoFabricante;
-        document.getElementById('valor-custo').value = item.valor_custo || '';
-        document.getElementById('valor').value = item.valor || '';
-        } else {
-            alert("Item não encontrado!");
-        }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-
-    const btnAnexar = document.querySelector('.icone-formulario[alt="Anexar"]');
-    const btnArquivos = document.querySelector('.icone-formulario[alt="Arquivos"]');
-    const inputAnexo = document.getElementById('input-anexo');
-    const modalArquivos = document.getElementById('modal-arquivos');
-    const listaArquivos = document.querySelector('.lista-arquivos');
-
-    if (modalArquivos) {
-        modalArquivos.addEventListener('mousedown', function(e) {
-            if (e.target === modalArquivos) {
-                modalArquivos.classList.remove('ativo');
-            }
-        });
-    }
-    // Array para armazenar os arquivos anexados
-    let anexos = [];
-
-    // Anexar arquivo
-    if (btnAnexar && inputAnexo) {
-        btnAnexar.addEventListener('click', function() {
-            inputAnexo.value = "";
-            inputAnexo.click();
-        });
-    }
-
-    if (inputAnexo) {
-        inputAnexo.addEventListener('change', function() {
-            if (inputAnexo.files.length > 0) {
-                // Adiciona todos os arquivos selecionados ao array
-                for (let i = 0; i < inputAnexo.files.length; i++) {
-                    anexos.push(inputAnexo.files[i]);
-                }
-            }
-        });
-    }
-
-    // Mostrar modal de arquivos
-    if (btnArquivos && modalArquivos) {
-        btnArquivos.addEventListener('click', function() {
-            renderizarListaArquivos();
-            modalArquivos.classList.add('ativo');
-        });
-    }
-
-    // Função para renderizar a lista de anexos
-   function renderizarListaArquivos() {
-    listaArquivos.innerHTML = '';
-    if (anexos.length === 0) {
-        listaArquivos.innerHTML = '<div style="text-align:center;color:#888;">Nenhum arquivo anexado.</div>';
-        return;
-    }
-    anexos.forEach(function(arquivo, idx) {
-        const div = document.createElement('div');
-        div.className = 'arquivo-item';
-
-        // Nome do arquivo (link para download)
-        const nome = document.createElement('a');
-        nome.className = 'arquivo-nome';
-        nome.textContent = arquivo.name;
-        nome.href = URL.createObjectURL(arquivo);
-        nome.download = arquivo.name;
-        nome.target = '_blank';
-
-        // Botão de remover
-        const btnRemover = document.createElement('button');
-        btnRemover.className = 'arquivo-remover';
-        btnRemover.title = 'Remover';
-        btnRemover.innerHTML = '<img src="imagens/lixeira-anexo.png" alt="Remover">';
-
-        btnRemover.onclick = function() {
-            anexos.splice(idx, 1);
-            renderizarListaArquivos();
-        };
-
-        div.appendChild(nome);
-        div.appendChild(btnRemover);
-        listaArquivos.appendChild(div);
-    });
-
-         if (modalArquivos) {
-    modalArquivos.addEventListener('mousedown', function(e) {
-        // Fecha o modal se clicar fora do conteúdo central
-        if (e.target === modalArquivos) {
-            modalArquivos.classList.remove('ativo');
-        }
-    });
-}
-}
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    const btnEditar = document.querySelector('.icone-formulario[alt="Editar"]');
-    const botoesEdicao = document.querySelector('.botoes-edicao');
-    const form = document.querySelector('.formulario-detalhes form');
-    let valoresOriginais = {};
-
-    if (btnEditar && botoesEdicao && form) {
-        btnEditar.addEventListener('click', function() {
-            // Salva os valores originais
-            form.querySelectorAll('input, textarea').forEach(function(el) {
-    valoresOriginais[el.id] = el.value;
-    el.readOnly = false;
-    el.removeAttribute('readonly');
-});
-            botoesEdicao.style.display = 'flex';
-        });
-
-        // Cancelar edição
-        document.querySelector('.btn-cancelar-edicao').onclick = function() {
-            // Restaura os valores originais
-            form.querySelectorAll('input, textarea').forEach(function(el) {
-                el.value = valoresOriginais[el.id];
-                el.readOnly = true;
-                el.setAttribute('readonly', true);
-            });
-            botoesEdicao.style.display = 'none';
-        };
-    }
-});
-
 // Handler unificado e único para exclusão em detalhes-material
 document.addEventListener('DOMContentLoaded', function() {
-    if (!window.location.pathname.endsWith('detalhes-material.html')) return;
+  if (!window.location.pathname.endsWith('detalhes-material.html')) return;
+  const btnExcluirIcone = document.querySelector('.icone-formulario[alt="Excluir"]');
+  const modalExcluir = document.getElementById('modal-excluir');
+  if (!modalExcluir) return;
+  const btnCancelar = modalExcluir.querySelector('.btn-cancelar');
+  const btnExcluir = modalExcluir.querySelector('.btn-excluir');
+  if (btnExcluirIcone) btnExcluirIcone.onclick = () => modalExcluir.classList.add('ativo');
+  if (btnCancelar) btnCancelar.onclick = () => modalExcluir.classList.remove('ativo');
+  if (!btnExcluir) return;
 
-    const btnExcluirIcone = document.querySelector('.icone-formulario[alt="Excluir"]');
-    const modalExcluir = document.getElementById('modal-excluir');
-    if (!modalExcluir) return;
-
-    const btnCancelar = modalExcluir.querySelector('.btn-cancelar');
-    const btnExcluir = modalExcluir.querySelector('.btn-excluir');
-
-    if (btnExcluirIcone) btnExcluirIcone.onclick = () => modalExcluir.classList.add('ativo');
-    if (btnCancelar) btnCancelar.onclick = () => modalExcluir.classList.remove('ativo');
-    if (!btnExcluir) return;
-
-    btnExcluir.onclick = async function() {
-        modalExcluir.classList.remove('ativo'); // fecha modal
-        const id = getParametroUrl('id');
-        if (!id) return;
-
-        const notificacao = document.getElementById('notificacao');
-
-        if (!ipcRenderer) {
-            const msg = "Operação só disponível no Electron.";
-            if (notificacao) {
-                notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block";
-                setTimeout(() => { notificacao.style.display = "none"; }, 3000);
-            } else {
-                alert(msg);
-            }
-            return;
-        }
-
-        try {
-            const res = await ipcRenderer.invoke('excluir-material', id);
-            if (res && res.ok) {
-                if (notificacao) {
-                    notificacao.textContent = "Material excluído com sucesso!"; notificacao.className = "sucesso";
-                    notificacao.style.display = "block";
-                }
-                setTimeout(() => {
-                    if (notificacao) notificacao.style.display = "none";
-                    window.location.href = 'menu.html';
-                }, 900);
-            } else {
-                const msg = (res && res.error) ? res.error : "Erro ao excluir material!";
-                if (notificacao) {
-                    notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block";
-                    setTimeout(() => { notificacao.style.display = "none"; }, 3000);
-                } else {
-                    alert(msg);
-                }
-            }
-        } catch (err) {
-            console.error('Erro ao excluir material via IPC:', err);
-            const msg = (err && err.message) ? err.message : 'Erro ao excluir material!';
-            if (notificacao) {
-                notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block";
-                setTimeout(() => { notificacao.style.display = "none"; }, 3000);
-            } else {
-                alert(msg);
-            }
-        }
-    };
+  btnExcluir.onclick = async function() {
+    modalExcluir.classList.remove('ativo');
+    const id = getParametroUrl('id');
+    if (!id) return;
+    const notificacao = document.getElementById('notificacao');
+    if (!ipcRenderer) {
+      const msg = "Operação só disponível no Electron.";
+      if (notificacao) { notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block"; setTimeout(()=>{ notificacao.style.display = "none"; }, 3000); }
+      else alert(msg);
+      return;
+    }
+    try {
+      const res = await ipcRenderer.invoke('excluir-material', id);
+      if (res && res.ok) {
+        if (notificacao) { notificacao.textContent = "Material excluído com sucesso!"; notificacao.className = "sucesso"; notificacao.style.display = "block"; }
+        setTimeout(() => {
+          if (notificacao) notificacao.style.display = "none";
+          // garante redirecionamento CORRETO para o menu após excluir material
+          window.location.href = 'menu.html';
+        }, 900);
+      } else {
+        const msg = (res && res.error) ? res.error : "Erro ao excluir material!";
+        if (notificacao) { notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block"; setTimeout(()=>{ notificacao.style.display = "none"; }, 3000); }
+        else alert(msg);
+      }
+    } catch (err) {
+      console.error('Erro ao excluir material via IPC:', err);
+      const msg = (err && err.message) ? err.message : 'Erro ao excluir material!';
+      if (notificacao) { notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block"; setTimeout(()=>{ notificacao.style.display = "none"; }, 3000); }
+      else alert(msg);
+    }
+  };
 });
 
 // Função para obter parâmetro da URL
 function getParametroUrl(nome) {
-    const url = new URL(window.location.href);
-    return url.searchParams.get(nome);
+    try {
+        const url = new URL(window.location.href);
+        return url.searchParams.get(nome);
+    } catch (_) {
+        // fallback simples para ambientes sem URL (ou se window.location.href for estranho)
+        const qs = window.location.search || (window.location.href.split('?')[1] || '');
+        const match = qs.match(new RegExp('[?&]' + nome + '=([^&]*)'));
+        return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+    }
 }
 
 // Carregar detalhes do material na página de detalhes (somente IPC - Electron)
@@ -1061,74 +912,53 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    if (!window.location.pathname.endsWith('detalhes-fornecedor.html')) return;
+  if (!window.location.pathname.endsWith('detalhes-fornecedor.html')) return;
+  const btnExcluirIcone = document.querySelector('.icone-formulario[alt="Excluir"]');
+  const modal = document.getElementById('modal-excluir-fornecedor') || document.getElementById('modal-excluir');
+  if (!modal) return;
+  const btnCancelar = modal.querySelector('.btn-cancelar');
+  const btnConfirmar = modal.querySelector('.btn-excluir');
+  const notificacao = document.getElementById('notificacao');
+  if (btnExcluirIcone) btnExcluirIcone.onclick = () => modal.style.display = 'flex';
+  if (btnCancelar) btnCancelar.onclick = () => modal.style.display = 'none';
+  if (!btnConfirmar) return;
 
-    const btnExcluirIcone = document.querySelector('.icone-formulario[alt="Excluir"]');
-    // tenta os dois ids possíveis de modal para compatibilidade
-    const modal = document.getElementById('modal-excluir-fornecedor') || document.getElementById('modal-excluir');
-    if (!modal) return;
-
-    const btnCancelar = modal.querySelector('.btn-cancelar');
-    const btnConfirmar = modal.querySelector('.btn-excluir');
-    const notificacao = document.getElementById('notificacao');
-
-    if (btnExcluirIcone) btnExcluirIcone.onclick = () => modal.style.display = 'flex';
-    if (btnCancelar) btnCancelar.onclick = () => modal.style.display = 'none';
-    if (!btnConfirmar) return;
-
-    btnConfirmar.onclick = async function() {
-        modal.style.display = 'none';
-        const id = getParametroUrl('id');
-        if (!id) return;
-
-        try {
-            // Prioriza IPC no Electron
-            if (ipcRenderer) {
-                const res = await ipcRenderer.invoke('excluir-fornecedor', id);
-                if (res && res.ok) {
-                    if (notificacao) {
-                        notificacao.textContent = "Fornecedor excluído com sucesso!";
-                        notificacao.className = "sucesso";
-                        notificacao.style.display = "block";
-                    }
-                    setTimeout(() => { if (notificacao) notificacao.style.display = "none"; window.location.href = 'consulta-fornecedor.html'; }, 900);
-                    return;
-                } else {
-                    const msg = (res && res.error) ? res.error : 'Erro ao excluir fornecedor!';
-                    if (notificacao) {
-                        notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block";
-                        setTimeout(() => { notificacao.style.display = "none"; }, 3000);
-                    } else alert(msg);
-                    return;
-                }
-            }
-
-            // Fallback HTTP
-            const resp = await fetch(`http://localhost:3000/fornecedores/${encodeURIComponent(id)}`, { method: 'DELETE' });
-            if (resp.ok) {
-                if (notificacao) {
-                    notificacao.textContent = "Fornecedor excluído com sucesso!";
-                    notificacao.className = "sucesso";
-                    notificacao.style.display = "block";
-                }
-                setTimeout(() => { if (notificacao) notificacao.style.display = "none"; window.location.href = 'consulta-fornecedor.html'; }, 900);
-            } else {
-                const txt = await resp.text().catch(() => null);
-                const msg = txt || 'Erro ao excluir fornecedor (HTTP).';
-                if (notificacao) {
-                    notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block";
-                    setTimeout(() => { notificacao.style.display = "none"; }, 3000);
-                } else alert(msg);
-            }
-        } catch (err) {
-            console.error('Erro ao excluir fornecedor:', err);
-            const msg = (err && err.message) ? err.message : 'Erro ao excluir fornecedor!';
-            if (notificacao) {
-                notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block";
-                setTimeout(() => { notificacao.style.display = "none"; }, 3000);
-            } else alert(msg);
+  btnConfirmar.onclick = async function() {
+    modal.style.display = 'none';
+    const id = getParametroUrl('id');
+    if (!id) return;
+    try {
+      if (ipcRenderer) {
+        const res = await ipcRenderer.invoke('excluir-fornecedor', id);
+        if (res && res.ok) {
+          if (notificacao) { notificacao.textContent = "Fornecedor excluído com sucesso!"; notificacao.className = "sucesso"; notificacao.style.display = "block"; }
+          setTimeout(() => { if (notificacao) notificacao.style.display = "none"; window.location.href = 'consulta-fornecedor.html'; }, 900);
+          return;
+        } else {
+          const msg = (res && res.error) ? res.error : 'Erro ao excluir fornecedor!';
+          if (notificacao) { notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block"; setTimeout(()=>{ notificacao.style.display = "none"; }, 3000); }
+          else alert(msg);
+          return;
         }
-    };
+      }
+      // fallback HTTP
+      const resp = await fetch(`http://localhost:3000/fornecedores/${encodeURIComponent(id)}`, { method: 'DELETE' });
+      if (resp.ok) {
+        if (notificacao) { notificacao.textContent = "Fornecedor excluído com sucesso!"; notificacao.className = "sucesso"; notificacao.style.display = "block"; }
+        setTimeout(() => { if (notificacao) notificacao.style.display = "none"; window.location.href = 'consulta-fornecedor.html'; }, 900);
+      } else {
+        const txt = await resp.text().catch(()=>null);
+        const msg = txt || 'Erro ao excluir fornecedor (HTTP).';
+        if (notificacao) { notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block"; setTimeout(()=>{ notificacao.style.display = "none"; }, 3000); }
+        else alert(msg);
+      }
+    } catch (err) {
+      console.error('Erro ao excluir fornecedor:', err);
+      const msg = (err && err.message) ? err.message : 'Erro ao excluir fornecedor!';
+      if (notificacao) { notificacao.textContent = msg; notificacao.className = "erro"; notificacao.style.display = "block"; setTimeout(()=>{ notificacao.style.display = "none"; }, 3000); }
+      else alert(msg);
+    }
+  };
 });
 
 function formatarMoeda(valor) {
@@ -1746,3 +1576,111 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 });
+
+/* ====== Módulo consolidado para fornecedor / select ====== */
+async function loadFornecedores() {
+  try {
+    if (ipcRenderer) {
+      const res = await ipcRenderer.invoke('listar-fornecedores');
+      if (Array.isArray(res)) return res;
+      if (res && Array.isArray(res.fornecedores)) return res.fornecedores;
+    }
+  } catch (e) { console.warn('IPC listar-fornecedores falhou:', e); }
+  try {
+    const forns = await fetchJson('http://localhost:3000/fornecedores', 700);
+    if (Array.isArray(forns)) return forns;
+  } catch (_) {}
+  return [];
+}
+
+(function fornecedorModule() {
+  function setupExpandableSelects() {
+    const selector = '.select-wrapper select, select#select-fornecedor';
+    document.querySelectorAll(selector).forEach(sel => {
+      if (sel._expandableInit) return;
+      sel._expandableInit = true;
+      const VISIBLE = 4;
+      function expand() {
+        const wrapper = sel.parentElement;
+        if (wrapper && getComputedStyle(wrapper).position === 'static') wrapper.style.position = 'relative';
+        sel.setAttribute('size', String(VISIBLE));
+        sel.style.overflowY = 'auto';
+        sel.style.zIndex = '9999';
+        sel.style.boxSizing = 'border-box';
+      }
+      function collapse() {
+        sel.removeAttribute('size');
+        sel.style.overflowY = '';
+        sel.style.zIndex = '';
+        sel.style.boxSizing = '';
+      }
+      sel.addEventListener('mousedown', function (ev) {
+        const isOpen = sel.hasAttribute('size');
+        if (!isOpen) { ev.preventDefault(); expand(); sel.focus(); }
+      });
+      sel.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== sel) collapse(); }, 120));
+      sel.addEventListener('change', () => setTimeout(collapse, 120));
+      sel.addEventListener('keydown', e => { if (e.key === 'Escape') collapse(); });
+    });
+  }
+
+  async function setupFornecedorDetails() {
+    if (!window.location.pathname.endsWith('detalhes-material.html')) return;
+    const input = document.getElementById('fornecedor');
+    const select = document.getElementById('select-fornecedor');
+    const btnEditar = document.querySelector('.icone-formulario[alt="Editar"]');
+    const btnConfirm = document.querySelector('.btn-confirmar-edicao');
+    const btnCancel = document.querySelector('.btn-cancelar-edicao');
+    if (!input || !select) return;
+
+    async function popularSelect() {
+      const forns = await loadFornecedores();
+      select.innerHTML = '<option value="">Selecione o fornecedor</option>';
+      forns.forEach(f => {
+        const o = document.createElement('option');
+        o.value = String(f.id);
+        o.textContent = `${f.id} - ${f.nome}`;
+        select.appendChild(o);
+      });
+    }
+
+    select.style.display = 'none';
+    select.disabled = true;
+
+    async function enterEdit() {
+      if (select.options.length <= 1) await popularSelect();
+      const curId = (input.value || '').split(' - ')[0].trim();
+      select.value = curId || '';
+      input.style.display = 'none';
+      select.style.display = '';
+      select.disabled = false;
+      setupExpandableSelects();
+      select.focus();
+    }
+
+    function exitEdit(save) {
+      if (save) {
+        const opt = select.options[select.selectedIndex];
+        if (opt && opt.value) input.value = opt.textContent;
+      }
+      select.style.display = 'none';
+      select.disabled = true;
+      input.style.display = '';
+    }
+
+    if (btnEditar) btnEditar.addEventListener('click', e => { e.preventDefault(); enterEdit(); });
+    if (btnCancel) btnCancel.addEventListener('click', e => { e.preventDefault(); exitEdit(false); });
+    if (btnConfirm) btnConfirm.addEventListener('click', e => { e.preventDefault(); exitEdit(true); document.dispatchEvent(new Event('fornecedor:saved')); });
+
+    select.addEventListener('change', () => {
+      const opt = select.options[select.selectedIndex];
+      if (opt && opt.value) input.value = opt.textContent;
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { setupExpandableSelects(); setupFornecedorDetails(); });
+  } else {
+    setupExpandableSelects(); setupFornecedorDetails();
+  }
+})();
