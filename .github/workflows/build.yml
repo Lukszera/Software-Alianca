@@ -24,8 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Desabilita publish automático: evita exigir GH_TOKEN aqui
       - name: Build Electron app
-        run: npm run dist
+        run: npm run dist -- -c.publish=never
         env:
           PGHOST: localhost
           PGUSER: postgres
