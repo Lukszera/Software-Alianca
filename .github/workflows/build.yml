@@ -39,15 +39,14 @@ jobs:
         with:
           name: alianca-software-windows
           path: |
-            C:\Builds\alianca-dist\*.exe
-            C:\Builds\alianca-dist\*.exe.blockmap
+            dist/*.exe
+            dist/*.exe.blockmap
 
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            C:\Builds\alianca-dist\*.exe
+          files: dist/*.exe
           draft: false
           prerelease: false
         env:
