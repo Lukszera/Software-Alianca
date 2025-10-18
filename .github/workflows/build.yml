@@ -1,0 +1,54 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # dispara ao criar tag v1.0.0, v1.0.1, etc.
+  workflow_dispatch:  # permite rodar manualmente
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Electron app
+        run: npm run dist
+        env:
+          # Se quiser assinar, adicione secrets CSC_LINK (base64 do .pfx) e CSC_KEY_PASSWORD
+          # CSC_LINK: ${{ secrets.CSC_LINK }}
+          # CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: postgres
+          PGPORT: 5432
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: alianca-software-windows
+          path: |
+            C:\Builds\alianca-dist\*.exe
+            C:\Builds\alianca-dist\*.exe.blockmap
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            C:\Builds\alianca-dist\*.exe
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
