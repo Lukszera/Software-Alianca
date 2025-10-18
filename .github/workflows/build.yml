@@ -3,8 +3,8 @@ name: Build & Release
 on:
   push:
     tags:
-      - 'v*'  # dispara ao criar tag v1.0.0, v1.0.1, etc.
-  workflow_dispatch:  # permite rodar manualmente
+      - 'v*'
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -17,12 +17,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm install --save-dev electron electron-builder
+        run: npm install
 
       - name: Build Electron app
         run: npm run dist
