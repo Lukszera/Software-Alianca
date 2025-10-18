@@ -20,14 +20,13 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm install
+          npm install --save-dev electron electron-builder
 
       - name: Build Electron app
         run: npm run dist
         env:
-          # Se quiser assinar, adicione secrets CSC_LINK (base64 do .pfx) e CSC_KEY_PASSWORD
-          # CSC_LINK: ${{ secrets.CSC_LINK }}
-          # CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
           PGHOST: localhost
           PGUSER: postgres
           PGPASSWORD: ${{ secrets.PGPASSWORD }}
