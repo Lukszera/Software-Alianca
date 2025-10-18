@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write  # necessário para criar releases
+  contents: write
 
 jobs:
   build-windows:
@@ -24,9 +24,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Desabilita publish automático: evita exigir GH_TOKEN aqui
-      - name: Build Electron app
-        run: npm run dist -- -c.publish=never
+      # Desativa publicação automática do electron-builder
+      - name: Build Electron app (no auto publish)
+        run: npm run dist -- --publish=never
         env:
           PGHOST: localhost
           PGUSER: postgres
