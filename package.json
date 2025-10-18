@@ -1,52 +1,37 @@
 {
-  "name": "software-alianca",
+  "name": "alianca-software",
+  "productName": "Alianca Software",
   "version": "1.0.0",
-  "description": "Aplicação de estoque com Electron",
+  "description": "Sistema de gerenciamento de estoque - Alianca Software",
+  "author": "Lucas Ulbrich Franco <luulbrichfranco@gmail.com>",
   "main": "main.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Lukszera/Software-Alianca.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Lukszera/Software-Alianca/issues"
-  },
-  "homepage": "https://github.com/Lukszera/Software-Alianca#readme",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "pg": "^8.16.0"
-  },
-  "devDependencies": {
-    "electron": "^38.3.0",
-    "electron-builder": "^25.1.8"
+    "pg": "^8.0.0"
   },
   "build": {
-    "appId": "com.software.alianca",
-    "productName": "Software Aliança",
+    "appId": "com.suaempresa.alianca",
     "files": [
-      "**/*",
-      "!backend/**",
-      "!**/*.map"
+      "**/*"
+    ],
+    "asarUnpack": [
+      "node_modules/pg/**"
     ],
     "win": {
-      "target": ["nsis"],
-      "artifactName": "${productName}-Setup-${version}.${ext}"
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "imagens/icone.ico"
     },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "shortcutName": "Software Aliança"
+    "directories": {
+      "output": "dist"
     }
+  },
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win --x64"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.1.8"
   }
 }
