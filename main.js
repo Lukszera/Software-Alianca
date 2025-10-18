@@ -222,21 +222,23 @@ ipcMain.handle('movimentar-material', async (event, { tipo, codigo_interno, quan
   }
 });
 
-ipcMain.handle('historico-material', async (event, codigo_interno) => {
+// Retorna histórico de movimentações por material_id (usa tabela historico_movimentacoes)
+ipcMain.handle('historico-movimentacoes', async (event, materialId) => {
+  console.log('[main] historico-movimentacoes invoked, materialId=', materialId);
   try {
-    const materialId = Number(codigo_interno);
-    const res = await client.query(
-      `SELECT h.*, f.nome as fornecedor_nome
-       FROM historico_movimentacoes h
-       LEFT JOIN fornecedores f ON NULLIF(h.fornecedor, '')::integer = f.id
-       WHERE h.material_id = $1
-       ORDER BY h.data DESC`,
-      [materialId]
-    );
-    return res.rows;
+    if (!materialId) return [];
+    const q = `
+      SELECT h.*, f.nome AS fornecedor_nome
+      FROM historico_movimentacoes h
+      LEFT JOIN fornecedores f ON h.fornecedor = f.id
+      WHERE h.material_id = $1
+      ORDER BY h.data DESC
+    `;
+    const res = await client.query(q, [materialId]);
+    return res.rows || [];
   } catch (err) {
-    console.error('historico-material:', err);
-    return [];
+    console.error('historico-movimentacoes erro:', err);
+    return { ok: false, error: err.message || String(err) };
   }
 });
 
@@ -258,3 +260,4 @@ ipcMain.handle('materiais-estoque-baixo', async () => {
     return [];
   }
 });
+
