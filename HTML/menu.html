@@ -12,41 +12,43 @@
         <img src="../imagens/Logo4.png" alt="Logo" height="135">
     </header>
 
-    <div class="fundo">
-        <div class="pesquisa">
-            <input type="text" placeholder="Busque pelo material que deseja" class="input-busca">
-            <img src="../imagens/lupa.png" class="icone-lupa" alt="Search">
-        </div>
-        <button class="botao-cadastro" onclick="window.location.href='cadastro-material.html'">CADASTRAR MATERIAL</button>
-        <button class="botao-movimentacao" onclick="window.location.href='movimentacao-material.html'">ENTRADA/SAÍDA DE MATERIAL</button>
-        <button class="botao-fornecedor" onclick="window.location.href='cadastro-fornecedor.html'">CADASTRAR FORNECEDOR</button>
-        <button class="botao-consulta-fornecedor" onclick="window.location.href='consulta-fornecedor.html'">CONSULTA FORNECEDOR</button>
-        <button class="botao-historico" onclick="window.location.href='historico-movimentacoes.html'">HISTÓRICO DE MOVIMENTAÇÕES</button>
-        <button class="botao-estoque-baixo" onclick="window.location.href='estoque-baixo.html'">ESTOQUE BAIXO</button>
+    <main class="conteudo">
+        <div class="fundo">
+            <div class="pesquisa">
+                <input type="text" placeholder="Busque pelo material que deseja" class="input-busca">
+                <img src="../imagens/lupa.png" class="icone-lupa" alt="Search">
+            </div>
+            <button class="botao-cadastro" onclick="window.location.href='cadastro-material.html'">CADASTRAR MATERIAL</button>
+            <button class="botao-movimentacao" onclick="window.location.href='movimentacao-material.html'">ENTRADA/SAÍDA DE MATERIAL</button>
+            <button class="botao-fornecedor" onclick="window.location.href='cadastro-fornecedor.html'">CADASTRAR FORNECEDOR</button>
+            <button class="botao-consulta-fornecedor" onclick="window.location.href='consulta-fornecedor.html'">CONSULTA FORNECEDOR</button>
+            <button class="botao-historico" onclick="window.location.href='historico-movimentacoes.html'">HISTÓRICO DE MOVIMENTAÇÕES</button>
+            <button class="botao-estoque-baixo" onclick="window.location.href='estoque-baixo.html'">ESTOQUE BAIXO</button>
         </div>
 
-    <div class="tabela">
-        <table class="tabela-estoque">
-            <thead>
-                <tr>
-                    <th>CÓDIGO INTERNO</th>
-                    <th>DESCRIÇÃO BREVE</th>
-                    <th>FABRICANTE</th>
-                    <th>CÓDIGO FABRICANTE</th>
-                    <th>VALOR</th>
-                    <th>QUANTIDADE</th>
-                    <th>UND. MEDIDA</th>
-                    <th>FORNECEDOR</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody id="tbody-materiais">
-            </tbody>
-        </table>
-    </div>
-    
-    <script src="../funcoes.js"></script>
+        <div class="tabela">
+            <div class="table-wrap"> 
+                <table class="tabela-estoque">
+                    <thead>
+                        <tr>
+                            <th>CÓDIGO INTERNO</th>
+                            <th>DESCRIÇÃO BREVE</th>
+                            <th>FABRICANTE</th>
+                            <th>CÓDIGO FABRICANTE</th>
+                            <th>VALOR</th>
+                            <th>QUANTIDADE</th>
+                            <th>UND. MEDIDA</th>
+                            <th>FORNECEDOR</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-materiais"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="../funcoes.js" defer></script>
     <div id="notificacao-estoque-baixo" style="display:none;"></div>
-    
 </body>
 </html>

@@ -1,42 +1,51 @@
 body {
-  background-color: #E6E6E6;
-  font-family: 'Roboto', sans-serif;
-  overflow: hidden;
+    background-color: #E6E6E6;
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
 }
 
 header {
-  background-color: #00A54F;
-  text-align: center;
-  margin: -10px; 
-  border-bottom: 5px solid #DBC056
-  ;
+    background-color: #00A54F;
+    text-align: center;
+    margin: -10px;
+    border-bottom: 5px solid #DBC056;
 }
 
+/* Layout principal: painel + tabela lado a lado */
+.conteudo {
+  display: flex;
+  gap: 16px;           /* espaço entre painel e tabela */
+  padding: 16px;
+  max-width: 1600px;   /* limita largura em telas muito grandes */
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+/* Painel lateral (menu de ações) */
 .fundo {
   border: 4px solid #00A54F;
   background-color: #DBC056;
-  width: 400px;
-  height: 830px;
-  margin: 0; 
-  padding: 10px;
+  width: min(380px, 100%);
+  padding: 12px;
   box-sizing: border-box;
-  position: absolute; 
-  top: 290px; 
-  left: 110px; 
+  position: static;    /* remove absolute */
+  height: auto;        /* cresce conforme conteúdo */
+  top: auto; left: auto;
 }
 
 .pesquisa {
   display: flex;
   align-items: center;
+  gap: 8px;
   margin-bottom: 20px;
 }
 
 .input-busca {
   flex: 1;
-  padding: 5px;
+  padding: 8px 10px;
   border: 3px solid #00A54F;
   border-radius: 5px;
-  height: 30px;
+  height: 25px;
 }
 
 .input-busca:focus {
@@ -45,99 +54,30 @@ header {
 }
 
 .icone-lupa {
-  width: 40px;
-  height: 40px;
-  margin-left: 10px; 
+  width: 32px;
+  height: 32px;
 }
 
-.botao-cadastro {
-  background-color: #00A54F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  height: 45px;
-  padding: 10px;
-  font-size: 17px;
-  font-weight: bold; 
-  cursor: pointer; 
-}
-
-.botao-movimentacao {
-  background-color: #00A54F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  height: 45px;
-  padding: 10px;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer; 
-}
-
-.botao-fornecedor {
-  background-color: #00A54F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  height: 45px;
-  padding: 10px;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer; 
-}
-
-.botao-consulta-fornecedor {
-  background-color: #00A54F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  height: 45px;
-  padding: 10px;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-bottom: 15px;
-}
-
-.botao-historico {
-  background-color: #00A54F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  height: 45px;
-  padding: 10px;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer; 
-}
-
-.botao-estoque-baixo {
-  background-color: #00A54F;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  width: 100%;
-  height: 45px;
-  padding: 10px;
-  font-size: 17px;
-  font-weight: bold;
-  cursor: pointer; 
-}
-
+/* Botões do painel */
 .botao-cadastro,
 .botao-movimentacao,
 .botao-fornecedor,
 .botao-consulta-fornecedor,
 .botao-historico,
 .botao-estoque-baixo {
-  margin-bottom: 15px; 
+  display: block;
+  width: 100%;
+  height: 45px;
+  margin-bottom: 12px;
+  background-color: #00A54F;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
 }
-
 .botao-cadastro:hover,
 .botao-movimentacao:hover,
 .botao-fornecedor:hover,
@@ -147,93 +87,72 @@ header {
   background-color: #078343;
 }
 
+/* Área da tabela */
 .tabela {
-  overflow-y: auto; /* Permite rolagem vertical */
-  margin-top: 20px;
-  position: absolute;
-  top: 270px;
-  left: 530px; /* Ajuste a posição horizontal conforme necessário */
-  max-height: 830px; /* Define uma altura máxima para a rolagem */
-  border-radius: 7px; 
+  flex: 1 1 auto;
+  min-width: 0;             /* importante para o flex permitir encolher */
+  border-radius: 7px;
+  overflow: hidden;         /* arredondamento nas bordas */
+  position: static; top: auto; left: auto;
 }
 
-/* Estilização da barra de rolagem */
-.tabela::-webkit-scrollbar {
-  width: 9px; /* Largura da barra de rolagem */
+.table-wrap {
+  overflow: auto;           /* scroll vertical/horizontal conforme necessário */
+  max-height: calc(100vh - 220px); /* ocupa a tela abaixo do header em notebooks */
+  background: #fff;
+  border: 3px solid #00A54F;
+  border-radius: 7px;
 }
 
-.tabela::-webkit-scrollbar-track {
-  background: #E6E6E6; /* Cor do fundo da barra de rolagem */
-}
-
-.tabela::-webkit-scrollbar-thumb {
-  background: #00A54F; /* Cor do "polegar" da barra de rolagem */
-  border-radius: 4px; /* Bordas arredondadas */
-}
-
-.tabela::-webkit-scrollbar-thumb:hover {
-  background: #078343; /* Cor ao passar o mouse no "polegar" */
-}
-
+/* Tabela */
 .tabela-estoque {
-  width: 100%; /* Permite que a tabela aumente de largura sem limite */
-  border-collapse: collapse; /* Remove espaços entre bordas */
-  text-align: center; /* Centraliza o texto */
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
   font-size: 16px;
-  border: 3px solid #00A54F; /* Aumenta a espessura das bordas externas da tabela */
 }
 
-.tabela-estoque th, .tabela-estoque td {
-  border: 3px solid #00A54F; /* Aumenta a espessura das bordas das células */
-  padding: 45px; /* Aumenta ainda mais o espaçamento interno para ampliar visualmente a largura */
-  text-align: center; /* Centraliza o texto nas células */
-  background-clip: padding-box; /* Garante que o fundo cubra até a borda */
+.tabela-estoque th,
+.tabela-estoque td {
+  border: 1.5px solid #00A54F;
+  padding: 10px 12px;       /* antes era 45px: muito grande */
+  background-clip: padding-box;
+  font-size: 14px;
 }
 
 .tabela-estoque th {
   background-color: #00A54F;
-  color: white;
+  color: #fff;
   text-transform: uppercase;
   position: sticky;
   top: 0;
   z-index: 2;
-  border: 3px solid #00A54F;
 }
 
-.tabela-estoque td {
-  border-collapse: collapse;
-  border: 3px solid #00A54F;
-}
-
-.tabela-estoque tr:nth-child(even) td {
-  background-color: #f8f8f8; /* Cor alternada para linhas pares */
-}
+.tabela-estoque tr:nth-child(even) td { background-color: #f8f8f8; }
 
 .tabela-estoque button {
   background-color: #DBC056;
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 6px 10px;
   cursor: pointer;
-  font-weight: bold; 
-  font-size: 15px; /* Aumenta o tamanho da fonte */
-  height: 42px;
-  width: 180px;
-  display: flex;
+  font-weight: bold;
+  font-size: 14px;
+  height: 36px;
+  width: 160px;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-evenly; /* Adiciona espaço entre o texto e a imagem */
+  justify-content: center;
 }
-
-.tabela-estoque button:hover {
-  background-color: #caae3d; /* Cor ao passar o mouse */
-}
+.tabela-estoque button:hover { background-color: #caae3d; }
 
 .icone-olho {
-  width: 40px; /* Ajusta a largura da imagem */
-  height: 40px; /* Ajusta a altura da imagem */
-  cursor: pointer;
-  background-color: white; /* Define o fundo branco */
-  border-radius: 75px; /* Opcional: arredonda as bordas */
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  background-color: white;
+  border-radius: 50%;
 }
 

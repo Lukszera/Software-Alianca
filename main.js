@@ -216,64 +216,56 @@ ipcMain.handle('excluir-material', async (event, id) => {
 /* -----------------------------
    Movimentação e Histórico
    ----------------------------- */
-ipcMain.handle('movimentar-material', async (event, { tipo, codigo_interno, quantidade }) => {
+ipcMain.handle('movimentar-material', async (_e, { tipo, codigo_interno, quantidade }) => {
   try {
-    const id = Number(codigo_interno);
-    const q = Number(quantidade);
-    const res = await query('SELECT * FROM materiais WHERE id = $1', [id]);
-    if (!res.length) return { ok: false, error: 'Material não encontrado!' };
+    const mult = String(tipo).toLowerCase() === 'saida' ? -1 : 1;
+    const qnt = Number(quantidade || 0);
 
-    let novaQuantidade = Number(res[0].quantidade);
-    if (tipo === 'entrada') {
-      novaQuantidade += q;
-    } else if (tipo === 'saida') {
-      if (novaQuantidade < q) return { ok: false, error: 'Quantidade insuficiente em estoque!' };
-      novaQuantidade -= q;
-    } else {
-      return { ok: false, error: 'Tipo de movimentação inválido!' };
-    }
-
-    await query('UPDATE materiais SET quantidade = $1 WHERE id = $2', [novaQuantidade, id]);
+    const rows = await query(
+      `UPDATE materiais
+         SET quantidade = GREATEST(0, COALESCE(quantidade,0) + $1)
+       WHERE id = $2
+       RETURNING id, descricao_breve, valor_custo, valor, fornecedor, und_medida, quantidade, quantidade_segura`,
+      [mult * qnt, Number(codigo_interno)]
+    );
+    const mat = rows[0];
+    if (!mat) return { ok: false, error: 'Material não encontrado' };
 
     await query(
-      `INSERT INTO historico_movimentacoes 
-        (material_id, tipo, quantidade, data, valor_custo, valor_venda, fornecedor, und_medida)
+      `INSERT INTO historico_movimentacoes
+         (material_id, tipo, quantidade, data, valor_custo, valor_venda, fornecedor, und_medida)
        VALUES ($1, $2, $3, NOW(), $4, $5, $6, $7)`,
       [
-        id,
-        tipo,
-        q,
-        res[0].valor_custo,
-        res[0].valor,
-        res[0].fornecedor,
-        res[0].und_medida
+        mat.id,
+        String(tipo).toLowerCase(),
+        qnt,
+        Number(mat.valor_custo || 0),
+        Number(mat.valor || 0),
+        mat.fornecedor ?? null,
+        mat.und_medida ?? null
       ]
     );
 
-    return { ok: true, message: 'Movimentação realizada com sucesso!', novaQuantidade };
+    return { ok: true, material_id: mat.id, novaQuantidade: mat.quantidade };
   } catch (err) {
-    console.error('movimentar-material:', err);
+    console.error('[IPC] movimentar-material error:', err);
     return { ok: false, error: err.message };
   }
 });
 
 // Retorna histórico de movimentações por material_id (usa tabela historico_movimentacoes)
-ipcMain.handle('historico-movimentacoes', async (event, materialId) => {
-  // console.log('[main] historico-movimentacoes invoked, materialId=', materialId); // remover ou comentar
+ipcMain.handle('historico-movimentacoes', async (_e, materialId) => {
   try {
-    if (!materialId) return [];
-    const q = `
-      SELECT h.*, f.nome AS fornecedor_nome
-      FROM historico_movimentacoes h
-      LEFT JOIN fornecedores f ON h.fornecedor = f.id
-      WHERE h.material_id = $1
-      ORDER BY h.data DESC
-    `;
-    const res = await query(q, [materialId]);
-    return res || [];
+    return await query(
+      `SELECT id, material_id, tipo, data, valor_custo, valor_venda, fornecedor, quantidade, und_medida
+         FROM historico_movimentacoes
+        WHERE material_id = $1
+        ORDER BY data DESC, id DESC`,
+      [Number(materialId)]
+    );
   } catch (err) {
-    console.error('historico-movimentacoes erro:', err);
-    return { ok: false, error: err.message || String(err) };
+    console.error('[IPC] historico-movimentacoes error:', err);
+    return { ok: false, error: err.message };
   }
 });
 

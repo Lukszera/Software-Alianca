@@ -40,7 +40,7 @@ header {
   border-radius: 16px;
   box-sizing: border-box;
   position: relative;
-  top: 100px;
+  top: 35px;
   left: 0;
   font-family: 'Roboto', sans-serif;
   box-shadow: 0 2px 16px rgba(0,0,0,0.15);
@@ -142,7 +142,7 @@ header {
 }
 
 .tabela-historico-wrapper {
-    max-height: 800px;      /* ajuste a altura conforme desejar */
+    max-height: 650px;      /* ajuste a altura conforme desejar */
     overflow-y: auto;
     margin-top: -25px;
     border-radius: 0 0 10px 10px;

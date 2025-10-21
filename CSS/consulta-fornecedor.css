@@ -44,9 +44,9 @@ h2 {
 }
 
 .tabela-fornecedor-wrapper {
-    width: 55%;
+    width: 65%;
     margin: 0 auto 40px auto;
-    max-height: 1050px; /* ajuste a altura conforme necessário */
+    max-height: 815px; /* ajuste a altura conforme necessário */
     overflow-y: auto;
     background: #fff;
     border-radius: 10px;

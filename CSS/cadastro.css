@@ -20,8 +20,8 @@ header {
 
 .formulario-cadastro {
   width: 720px; /* Aumenta a largura do formulário */
-  margin: 70px auto;
-  padding: 30px; /* Aumenta o padding para mais espaçamento interno */
+  margin: 60px auto;
+  padding: 10px; /* Aumenta o padding para mais espaçamento interno */
   border: 4px solid #00A54F;
   background-color: #E6E6E6;
   border-radius: 10px;
@@ -38,9 +38,9 @@ header {
   text-align: center;
   color: white;
   background-color: #00A54F;
-  padding: 15px; /* Aumenta o padding do cabeçalho */
-  margin: -30px -30px 30px -30px; /* Ajusta as margens */
-  font-size: 20px; /* Aumenta o tamanho da fonte */
+  padding: 10px; /* Aumenta o padding do cabeçalho */
+  margin: -10px -10px 30px -10px; /* Ajusta as margens */
+  font-size: 16px; /* Aumenta o tamanho da fonte */
 }
 
 .formulario-cadastro label {
@@ -48,21 +48,22 @@ header {
   margin-bottom: 6px; /* Aumenta o espaçamento entre o label e o campo */
   font-weight: bold;
   color: #000000;
+  font-size: 14px; /* Aumenta o tamanho da fonte */
 }
 
 .formulario-cadastro input, .formulario-cadastro textarea {
   width: 100%;
-  padding: 9px; /* Aumenta o padding dos campos */
+  padding: 6px; /* Aumenta o padding dos campos */
   margin-bottom: 12px; /* Aumenta o espaçamento entre os campos */
   border: 2px solid #DBC056;
   border-radius: 5px;
   box-sizing: border-box;
-  font-size: 18px; /* Aumenta o tamanho da fonte */
+  font-size: 14px; /* Aumenta o tamanho da fonte */
   font-family: 'Roboto', sans-serif; /* Garante que a fonte seja consistente */
 }
 
 .formulario-cadastro textarea {
-  height: 150px; /* Aumenta a altura do textarea */
+  height: 100px; /* Aumenta a altura do textarea */
   resize: none;
 }
 
@@ -88,17 +89,17 @@ header {
   display: flex;
   justify-content: center; /* Centraliza os botões horizontalmente */
   gap: 20px; /* Adiciona espaço entre os botões */
-  margin-top: 5px; /* Aumenta o espaçamento acima dos botões */
+  margin-top: -5px; /* Aumenta o espaçamento acima dos botões */
 }
 
 .botao-salvar {
   background-color: #00A54F;
   color: white;
   border: none;
-  padding: 15px 30px; /* Aumenta o padding dos botões */
+  padding: 10px 30px; /* Aumenta o padding dos botões */
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px; /* Aumenta o tamanho da fonte */
+  font-size: 14px; /* Aumenta o tamanho da fonte */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,10 +114,10 @@ header {
   background-color: #DBC056;
   color: white;
   border: none;
-  padding: 15px 30px; /* Aumenta o padding dos botões */
+  padding: 10px 30px; /* Aumenta o padding dos botões */
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px; /* Aumenta o tamanho da fonte */
+  font-size: 14px; /* Aumenta o tamanho da fonte */
   display: flex;
   align-items: center;
   justify-content: center;
