@@ -142,7 +142,7 @@ header {
 }
 
 .tabela-historico-wrapper {
-    max-height: 650px;      /* ajuste a altura conforme desejar */
+    max-height: 600px;      /* ajuste a altura conforme desejar */
     overflow-y: auto;
     margin-top: -25px;
     border-radius: 0 0 10px 10px;

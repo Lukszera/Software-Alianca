@@ -45,15 +45,15 @@ header {
 
 .formulario-cadastro label {
   display: block;
-  margin-bottom: 6px; /* Aumenta o espaçamento entre o label e o campo */
+  margin-bottom: 2px; /* Aumenta o espaçamento entre o label e o campo */
   font-weight: bold;
   color: #000000;
-  font-size: 14px; /* Aumenta o tamanho da fonte */
+  font-size: 12px; /* Aumenta o tamanho da fonte */
 }
 
 .formulario-cadastro input, .formulario-cadastro textarea {
   width: 100%;
-  padding: 6px; /* Aumenta o padding dos campos */
+  padding: 5px; /* Aumenta o padding dos campos */
   margin-bottom: 12px; /* Aumenta o espaçamento entre os campos */
   border: 2px solid #DBC056;
   border-radius: 5px;
@@ -63,7 +63,7 @@ header {
 }
 
 .formulario-cadastro textarea {
-  height: 100px; /* Aumenta a altura do textarea */
+  height: 90px; /* Aumenta a altura do textarea */
   resize: none;
 }
 
@@ -131,12 +131,12 @@ header {
 
 .formulario-cadastro select {
   width: 100%;
-  padding: 11px;
+  padding: 4px;
   margin-bottom: 20px;
   border: 2px solid #DBC056;
   border-radius: 5px;
   box-sizing: border-box;
-  font-size: 18px;
+  font-size: 14px;
   font-family: 'Roboto', sans-serif;
   background-color: #fff;
   color: #000;
@@ -202,11 +202,11 @@ header {
 /* aparência padrão do select (igual ao campo de cadastro) */
 .select-wrapper select {
   width: 100%;
-  padding: 9px 40px 9px 10px; /* espaço à direita para seta/scrollbar */
+  padding: 9px 0px 10px 10px; /* espaço à direita para seta/scrollbar */
   border: 2px solid #DBC056;
   border-radius: 5px;
   background: #fff;
-  font-size: 16px;
+  font-size: 14px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -216,9 +216,8 @@ header {
 
 /* seta custom (triângulo) à direita */
 .select-wrapper::after {
-  content: "";
   position: absolute;
-  right: 12px; /* espaço da borda - não sobrepor scrollbar */
+  right: 4px; /* espaço da borda - não sobrepor scrollbar */
   top: 50%;
   transform: translateY(-50%);
   width: 0;
@@ -249,6 +248,7 @@ header {
   background: #fff;
   padding-right: 26px; /* reserva espaço para a scrollbar */
   box-sizing: border-box;
+  padding: 4px;
 }
 
 /* opções com espaçamento melhor */

@@ -81,7 +81,7 @@ header {
 }
 
 .tabela-estoque-baixo-wrapper {
-    max-height: 700px;      /* ajuste a altura conforme desejar */
+    max-height: 650px;      /* ajuste a altura conforme desejar */
     overflow-y: auto;
     margin-top: 12px;
     border-radius: 0 0 10px 10px;
