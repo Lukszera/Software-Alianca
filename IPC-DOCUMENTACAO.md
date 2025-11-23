@@ -385,6 +385,6 @@ Sem o IPC, não seria possível ter uma aplicação desktop que combina a flexib
 ## Referências
 
 - [Documentação Oficial do Electron - IPC](https://www.electronjs.org/docs/latest/tutorial/ipc)
-- [Código-fonte deste projeto](https://github.com/Lukszera/Software-Alianca)
-- `main.js` - Implementação dos handlers IPC
-- `funcoes.js` - Uso do ipcRenderer nas páginas
+- Código-fonte deste projeto: veja o repositório no GitHub
+- `main.js` - Implementação dos handlers IPC no processo principal
+- `funcoes.js` - Uso do ipcRenderer nas páginas (processos renderizadores)
